@@ -109,7 +109,7 @@ void Scene::Export(const std::filesystem::path& path)
 
 	std::string lastCharacter = "";
 	bool wasLastBlockDialogue = false;
-	uint32_t slugCount = 420;
+	uint32_t slugCount = 1;
 	
 	docx::Paragraph p;
 
