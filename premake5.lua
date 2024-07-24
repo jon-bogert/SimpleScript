@@ -45,6 +45,7 @@ project "Core"
 
     links
     {
+	    "shell32",
         "opengl32",
         "winmm",
         "gdi32",

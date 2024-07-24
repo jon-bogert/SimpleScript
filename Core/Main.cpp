@@ -52,9 +52,9 @@ void TestCharacterBox()
 
 int main()
 {
-	//Application::Get().Start();
-	//Application::Get().Update();
-	//Application::Get().Shutdown();
+	Application::Get().Start();
+	Application::Get().Update();
+	Application::Get().Shutdown();
 
-	TestCharacterBox();
+	//TestCharacterBox();
 }

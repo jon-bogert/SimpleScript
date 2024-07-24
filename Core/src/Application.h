@@ -2,6 +2,7 @@
 #include "WindowManager.h"
 
 #include "Project.h"
+#include "Editor/Editor.h"
 
 #include <memory>
 
@@ -30,6 +31,7 @@ public:
 private:
     WindowManager m_windowManager;
     std::unique_ptr<Project> m_activeProject = nullptr;
+    std::unique_ptr<Editor> m_editor = nullptr;
 
     float m_scroll = 0.f;
 

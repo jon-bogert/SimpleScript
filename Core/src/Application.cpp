@@ -7,6 +7,9 @@ void Application::Start()
 {
 	m_windowManager.Start(1280, 720);
 	m_windowManager.SetResizeCallback([](uint32_t w, uint32_t h) {std::cout << "resize: " << w << " " << h << '\n'; });
+
+	m_editor = std::make_unique<Editor>();
+	m_windowManager.SetEditor(m_editor.get());
 }
 
 void Application::Update()

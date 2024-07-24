@@ -7,6 +7,8 @@
 #include <memory>
 #include <functional>
 
+class Editor;
+
 class WindowManager
 {
 public:
@@ -20,11 +22,19 @@ public:
 	bool IsOpen() const;
 	void Close();
 
+	void SetEditor(Editor* editor);
 	void SetResizeCallback(const std::function<void(uint32_t, uint32_t)>& resizeCallback);
 
 private:
+	void SaveSettings();
+	bool LoadSettings(sf::Vector2u& out_size);
+
 	std::unique_ptr<sf::RenderWindow> m_window = nullptr;
 	std::function<void(uint32_t, uint32_t)> m_resizeCallback = nullptr;
+
+	sf::Vector2u m_windowSize;
+
+	Editor* m_editor = nullptr;
 
 	sf::Clock m_deltaTimer;
 };
