@@ -10,6 +10,12 @@ void Application::Start()
 
 	m_editor = std::make_unique<Editor>();
 	m_windowManager.SetEditor(m_editor.get());
+
+	// TEMP
+	m_activeProject = std::make_unique<Project>();
+	m_activeProject->Start();
+	m_activeProject->Load("example.yaml");
+	std::cout << "Done Load" << std::endl;
 }
 
 void Application::Update()
@@ -23,6 +29,14 @@ void Application::Update()
 void Application::Shutdown()
 {
 	m_windowManager.Shutdown();
+}
+
+void Application::UpdateScroll(float amt)
+{
+	m_scroll -= amt;
+	
+	if (m_scroll >= 0.f)
+		m_scroll = 0.f;
 }
 
 Project* Application::GetActiveProject()

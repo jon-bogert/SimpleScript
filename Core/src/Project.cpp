@@ -1,179 +1,95 @@
 #include "Project.h"
 
-#include "Character.h"
-#include "Scene.h"
+#include "Application.h"
 #include "Debug.h"
+#include "GUI/CharacterBlock.h"
+#include "Script.h"
 
-#include <yaml-cpp/yaml.h>
-
-#include <sstream>
-#include <string>
-
-void Project::AddCharacter(const Character& character)
+void Project::Start()
 {
-	if (HasCharacter(character.name))
-		return;
-
-	m_characterLookup[character.name] = m_characters.size();
-	m_characters.push_back(character);
+	Application::Get().GetEditor()->GetViewport().SetResizeCallback([&](uint32_t w, uint32_t h) { Resize(w, h); });
 }
 
-void Project::UpdateCharacter(const std::string& name, const Character& info)
+void Project::Load(const std::filesystem::path& filepath)
 {
-	if (!HasCharacter(name))
-		return;
+	LOG("Start Load");
+	Script* script = new Script();
+	script->Load(filepath);
 
-	size_t index = m_characterLookup[name];
+	CharacterManifest& characters = CharacterManifest::Get();
 
-	//Check name change
-	if (name != info.name)
+	m_name = script->GetName();
+
+	CharacterBlock* lastCharacter = nullptr;
+	bool wasLastDialogue = false;
+
+	for (size_t i = 0; i < script->NumberOfBlocks(); ++i)
 	{
-		m_characterLookup.erase(name);
-		m_characterLookup[info.name] = index;
-	}
+		TextBlock& block = script->GetBlock(i);
+		LOG("Script Item: %i, character?: %s", i, block.character.c_str());
 
-	m_characters[index] = info;
-}
-
-bool Project::HasCharacter(const std::string& name) const
-{
-	return (m_characterLookup.find(name) != m_characterLookup.end());
-}
-
-Character Project::GetCharacter(const std::string& name) const
-{
-	if (!HasCharacter(name))
-		return Character();
-
-	return m_characters[m_characterLookup.at(name)];
-}
-
-bool Project::RemoveCharacter(const std::string& name)
-{
-	if (!HasCharacter(name))
-		return false;
-
-	size_t index = m_characterLookup[name];
-	m_characters.erase(m_characters.begin() + index);
-	m_characterLookup.erase(name);
-
-	// fix lookup indices
-	while (index < m_characters.size())
-	{
-		m_characterLookup[m_characters[index].name]--; // decrement the index
-		++index;
-	}
-	return true;
-}
-
-void Project::MoveCharacter(const size_t index, const bool isForward)
-{
-	if (isForward)
-	{
-		if (index >= m_characters.size() - 1)
-			return;
-
-		// Adjust lookup values
-		m_characterLookup[m_characters[index].name]++;
-		m_characterLookup[m_characters[index + 1].name]--;
-
-		//Do the swap
-		std::swap(m_characters[index], m_characters[index + 1]);
-		return;
-	}
-
-	// Backward
-	if (index <= 0)
-		return;
-
-	// Adjust lookup values
-	m_characterLookup[m_characters[index].name]--;
-	m_characterLookup[m_characters[index - 1].name]++;
-
-	//Do the swap
-	std::swap(m_characters[index], m_characters[index - 1]);
-}
-
-const std::vector<Character>& Project::GetCharacters() const
-{
-	return m_characters;
-}
-
-size_t Project::NumberOfScenes() const
-{
-	return m_scenes.size();
-}
-
-bool Project::OpenFromDirectory(const std::filesystem::path& path)
-{
-	if (!std::filesystem::exists(path))
-	{
-		LOG("Project directory not found at: %s", path.u8string().c_str());
-		return false;
-	}
-
-	m_directory = path;
-
-	std::filesystem::path charPath = m_directory / L"characters.yaml";
-	if (std::filesystem::exists(charPath))
-	{
-		LOG("TODO - Load characters");
-	}
-	
-	//Find Scene files
-	for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(path))
-	{
-		if (!entry.is_regular_file())
-			continue;
-
-		std::wstringstream sstream;
-		sstream << entry.path().filename().wstring();
-
-		// Check Filename
-
-		std::wstring cell;
-		std::getline(sstream, cell, L'_');
-		if (cell != L"SCENE") // Confirm Scene filename
-			continue;
-
-		SceneEntry sceneEntry{};
-
-		// Get Act Number
-		std::getline(sstream, cell, L'_');
-		try
+		if (block.type == TextBlock::Dialogue || block.type == TextBlock::Parenthetical)
 		{
-			uint32_t i = std::stoul(cell);
-			sceneEntry.act = i;
-		}
-		catch (std::exception)
-		{
-			LOG("Could not parse filename act: %s", entry.path().filename().u8string().c_str());
+			if (lastCharacter == nullptr
+				|| (wasLastDialogue && block.character != lastCharacter->GetCharacter()))
+			{
+				if (lastCharacter != nullptr)
+					lastCharacter->SetRecalculateVisuals(true);
+
+				lastCharacter = (CharacterBlock*)m_blocks.emplace_back(std::make_unique<CharacterBlock>()).get();
+				lastCharacter->Start(Application::Get().GetEditor()->GetViewport().GetRenderTarget().getSize().x);
+				lastCharacter->SetRecalculateVisuals(false);
+				lastCharacter->SetCharacter(block.character);
+			}
+			std::string content = block.content;
+			if (block.type == TextBlock::Parenthetical)
+			{
+				content = "(" + content + ")";
+			}
+			if (!lastCharacter->GetText().empty())
+			{
+				content = " " + content;
+			}
+
+			lastCharacter->AppendText(content);
+			wasLastDialogue = true;
 			continue;
 		}
 
-		// Get Scene Number
-		std::getline(sstream, cell, L'.');
-		try
-		{
-			uint32_t i = std::stoul(cell);
-			sceneEntry.scene = i;
-		}
-		catch (std::exception)
-		{
-			LOG("Could not parse filename scene: %s", entry.path().filename().u8string().c_str());
-			continue;
-		}
+		wasLastDialogue = false;
 
-		// Find Name from file contents
-		YAML::Node root = YAML::LoadFile(entry.path().string());
-		if (!root["name"].IsDefined())
-		{
-			sceneEntry.name = root["name"].as<std::string>();
-		}
+		if (lastCharacter != nullptr)
+			lastCharacter->SetRecalculateVisuals(true);
 
-		//Store info for loading later
-		m_scenes.push_back(sceneEntry);
+		lastCharacter = nullptr;
+
+		if (block.type == TextBlock::Action)
+		{
+			LOG("Action not yet implemented");
+		}
+		if (block.type == TextBlock::Slug)
+		{
+			LOG("Slug not yet implemented");
+		}
 	}
 
-	return true;
+	delete script;
+}
+
+void Project::RenderTo(sf::RenderTexture* renderTarget)
+{
+	uint32_t offset = 0;
+	for (auto& block : m_blocks)
+	{
+		block->SetOffset(offset);
+		block->RenderTo(renderTarget);
+	}
+}
+
+void Project::Resize(uint32_t width, uint32_t height)
+{
+	for (auto& block : m_blocks)
+	{
+		block->ChangeWidth(width);
+	}
 }

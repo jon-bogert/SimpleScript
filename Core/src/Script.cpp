@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Script.h"
 
 #include "Application.h"
 #include "Debug.h"
@@ -9,28 +9,28 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <yaml-cpp/yaml.h>
 
-void Scene::AddBlock(TextBlock::Type type)
+void Script::AddBlock(TextBlock::Type type)
 {
 	TextBlock& tb = m_blocks.emplace_back();
 	tb.type = type;
 }
 
-TextBlock& Scene::GetBlock(size_t index)
+TextBlock& Script::GetBlock(size_t index)
 {
 	return m_blocks[index];
 }
 
-void Scene::RemoveBlock(const size_t index)
+void Script::RemoveBlock(const size_t index)
 {
 	m_blocks.erase(m_blocks.begin() + index);
 }
 
-size_t Scene::NumberOfBlocks() const
+size_t Script::NumberOfBlocks() const
 {
 	return m_blocks.size();
 }
 
-void Scene::Load(const std::filesystem::path& path, const SceneEntry& entryData)
+void Script::Load(const std::filesystem::path& path)
 {
 	if (!std::filesystem::exists(path))
 	{
@@ -38,9 +38,46 @@ void Scene::Load(const std::filesystem::path& path, const SceneEntry& entryData)
 		return;
 	}
 
-	m_entryData = entryData;
+	CharacterManifest& characters = CharacterManifest::Get();
+	characters.clear();
 
 	YAML::Node root = YAML::LoadFile(path.u8string());
+
+	if (root["name"].IsDefined())
+	{
+		m_name = root["name"].as<std::string>();
+	}
+
+	if (root["characters"].IsDefined())
+	{
+
+		for (const YAML::Node charEntry : root["characters"])
+		{
+			if (!charEntry["name"].IsDefined())
+			{
+				LOG("Bad Character entry, no name field");
+				continue;
+			}
+			Character character;
+
+			character.name = charEntry["name"].as<std::string>();
+			Utility::AllCaps(character.name);
+
+			if (charEntry["color"].IsDefined() && charEntry["color"].size() >= 3)
+			{
+				character.color.r = charEntry["color"][0].as<uint8_t>();
+				character.color.g = charEntry["color"][1].as<uint8_t>();
+				character.color.b = charEntry["color"][2].as<uint8_t>();
+			}
+
+			if (charEntry["notes"].IsDefined())
+			{
+				character.notes = charEntry["notes"].as<std::string>();
+			}
+
+			characters.push_back(character);
+		}
+	}
 
 	if (!root["contents"].IsDefined())
 		return;
@@ -73,6 +110,8 @@ void Scene::Load(const std::filesystem::path& path, const SceneEntry& entryData)
 			continue;
 		}
 
+		CharacterManifest& characterManiftest = CharacterManifest::Get();
+
 		switch (block.type)
 		{
 		case TextBlock::Type::Parenthetical:
@@ -85,8 +124,7 @@ void Scene::Load(const std::filesystem::path& path, const SceneEntry& entryData)
 
 			std::string character = blockEntry["character"].as<std::string>();
 			Utility::AllCaps(character);
-			if (Application::Get().GetActiveProject() == nullptr ||
-				!Application::Get().GetActiveProject()->HasCharacter(character))
+			if (!characterManiftest.contains(character))
 			{
 				LOG("Warning: No Character found: %s", character.c_str());
 			}
@@ -94,16 +132,16 @@ void Scene::Load(const std::filesystem::path& path, const SceneEntry& entryData)
 			break;
 		}
 
-		if (blockEntry["content"].IsDefined())
+		if (blockEntry["text"].IsDefined())
 		{
-			block.content = blockEntry["content"].as<std::string>();
+			block.content = blockEntry["text"].as<std::string>();
 		}
 		
 		m_blocks.push_back(block);
 	}
 }
 
-void Scene::Export(const std::filesystem::path& path)
+void Script::Export(const std::filesystem::path& path)
 {
 	docx::Document doc;
 

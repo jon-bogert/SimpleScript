@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SceneEntry.h"
 #include "TextBlock.h"
+#include "Character.h"
 
 #include <filesystem>
 #include <vector>
@@ -11,7 +11,7 @@ namespace sf
 	class RenderTexture;
 }
 
-class Scene
+class Script
 {
 public:
 	void AddBlock(TextBlock::Type type);
@@ -19,12 +19,14 @@ public:
 	void RemoveBlock(const size_t index);
 	size_t NumberOfBlocks() const;
 
-	void Load(const std::filesystem::path& path, const SceneEntry& entryData);
+	void Load(const std::filesystem::path& path);
 	void Export(const std::filesystem::path& path);
 
-private:
-	SceneEntry m_entryData{};
+	std::string GetName() const { return m_name; }
+	void SetName(const std::string& name ) { m_name = name; }
 
+private:
 	std::vector<TextBlock> m_blocks;
+	std::string m_name = "Untitled";
 };
 

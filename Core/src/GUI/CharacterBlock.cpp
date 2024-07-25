@@ -1,5 +1,7 @@
 #include "CharacterBlock.h"
 
+#include "Application.h"
+#include "Debug.h"
 #include "Style.h"
 
 #include <algorithm>
@@ -26,8 +28,10 @@ void CharacterBlock::ChangeWidth(uint32_t maxWidth)
     testText.setFont(Style::Get().BodyFont());
     testText.setCharacterSize(Style::Get().BodyFontSize());
 
-	uint32_t bodyWidth = maxWidth
-		- Style::Get().ColorBarWidth()
+	Style& style = Style::Get();
+
+	int64_t bodyWidth = maxWidth;
+	bodyWidth -= (int64_t)Style::Get().ColorBarWidth()
 		- Style::Get().BodyYOffset()
 		- Style::Get().BodyPadding() * 4;
 
@@ -62,28 +66,44 @@ void CharacterBlock::SetText(const std::string& text)
     Recalculate();
 }
 
-void CharacterBlock::SetCharacter(Character* character)
+void CharacterBlock::AppendText(const std::string& text)
 {
-    m_character = character;
+	m_contents += text;
+}
 
-	if (character == nullptr)
+void CharacterBlock::SetCharacter(const std::string& name)
+{
+    m_characterName = name;
+
+	if (name == "")
 		return;
 
-	m_headerVisual.setString(m_character->name);
+	m_headerVisual.setString(name);
+}
+
+std::string CharacterBlock::GetCharacter() const
+{
+	return m_characterName;
 }
 
 void CharacterBlock::RenderTo(sf::RenderTexture* renderTarget)
 {
+	m_sprite.setPosition({ 0.f, (float)m_offset + Application::Get().GetScroll()});
 	renderTarget->draw(m_sprite);
 }
 
-uint32_t CharacterBlock::GetHeight() const
+void CharacterBlock::SetRecalculateVisuals(const bool doRecalculation)
 {
-	return m_height;
+	m_doRecalculate = doRecalculation;
+	if (m_doRecalculate)
+		Recalculate();
 }
 
 void CharacterBlock::Recalculate()
 {
+	if (!m_doRecalculate)
+		return;
+
     std::stringstream stream(m_contents);
     std::string formatted;
     std::string word;
@@ -150,7 +170,8 @@ void CharacterBlock::Recalculate()
 	m_renderTarget.draw(m_textVisual);
 
 	m_colorBar.setSize({ (float)Style::Get().ColorBarWidth(), (float)m_height });
-	sf::Color color = (m_character == nullptr) ? sf::Color(20, 20, 20, 255) : m_character->color;
+	CharacterManifest& characters = CharacterManifest::Get();
+	sf::Color color = (!characters.contains(m_characterName)) ? sf::Color(20, 20, 20, 255) : CharacterManifest::Get()[m_characterName].color;
 	m_colorBar.setFillColor(color);
 	m_renderTarget.draw(m_colorBar);
 

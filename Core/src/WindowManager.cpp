@@ -1,6 +1,7 @@
 #include "WindowManager.h"
 
 #include "AppData.h"
+#include "Application.h"
 #include "Debug.h"
 #include "Editor/Editor.h"
 
@@ -66,6 +67,10 @@ void WindowManager::Update()
 			m_windowSize = { width, height };
 			m_resizeCallback(width, height);
 		}
+		if (event.type == sf::Event::MouseWheelScrolled)
+		{
+			Application::Get().UpdateScroll(-event.mouseWheelScroll.delta * 2.f);
+		}
 	}
 
 	ImGui::SFML::Update(*m_window, m_deltaTimer.restart());
@@ -78,6 +83,10 @@ void WindowManager::Update()
 	ImGui::End();
 
 	m_editor->GetViewport().GetRenderTarget().clear(sf::Color::Black);
+	if (Application::Get().GetActiveProject() != nullptr)
+	{
+		Application::Get().GetActiveProject()->RenderTo(&m_editor->GetViewport().GetRenderTarget());
+	}
 	m_editor->GetViewport().GetRenderTarget().display();
 
 	m_window->clear();

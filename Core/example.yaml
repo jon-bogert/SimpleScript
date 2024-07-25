@@ -1,317 +1,348 @@
 name: Star Wars Excerpt
+characters:
+  - name: LUKE
+    color:
+      - 106
+      - 255
+      - 160
+    notes: Farmer boy from Tatooine.
+  - name: THREEPIO
+    color:
+      - 255
+      - 226
+      - 67
+    notes: Protocol droid of the Rebel Alliance
+  - name: ARTOO
+    color:
+      - 53
+      - 197
+      - 251
+    notes: Astromech droid of the Rebel Alliance
+  - name: OWEN
+    color:
+      - 145
+      - 101
+      - 33
+    notes: Luke's Uncle
+  - name: BERU
+    color:
+      - 122
+      - 228
+      - 223
+    notes: Luke's Aunt
 contents:
   - type: Slug
-    content: EXT. TATOOINE - DESERT - LARS HOMESTEAD - AFTERNOON
+    text: EXT. TATOOINE - DESERT - LARS HOMESTEAD - AFTERNOON
   - type: Action
-    content: The Jawas mutter gibberish as they busily line up their battered captives, including Artoo and Threepio, in front of the enormous Sandcrawler, which is parked beside a small homestead consisting of three large holes in the ground surrounded by several tall moisture vaporators and one small adobe block house.
+    text: The Jawas mutter gibberish as they busily line up their battered captives, including Artoo and Threepio, in front of the enormous Sandcrawler, which is parked beside a small homestead consisting of three large holes in the ground surrounded by several tall moisture vaporators and one small adobe block house.
   - type: Action
-    content: The Jawas scurry around fussing over the robots, straightening them up or brushing some dust from a dented metallic elbow. The shrouded little creatures smell horribly, attracting small insects to the dark areas when their mouths and nostrils should be. 
+    text: The Jawas scurry around fussing over the robots, straightening them up or brushing some dust from a dented metallic elbow. The shrouded little creatures smell horribly, attracting small insects to the dark areas when their mouths and nostrils should be. 
   - type: Action
-    content: Out of the shadows of a dingy side-building limps Owen Lars, a large burly man in his mid-fifties. His reddish eyes are sunken in a dust-covered face. As the farmer carefully inspects each robot, he is closely followed by his slump shouldered nephew, Luke Skywalker. One of the vile little Jawas walks ahead of the farmer spouting an animated sales pitch in a queer, unintelligible language.
+    text: Out of the shadows of a dingy side-building limps Owen Lars, a large burly man in his mid-fifties. His reddish eyes are sunken in a dust-covered face. As the farmer carefully inspects each robot, he is closely followed by his slump shouldered nephew, Luke Skywalker. One of the vile little Jawas walks ahead of the farmer spouting an animated sales pitch in a queer, unintelligible language.
   - type: Action
-    content: A voice calls out from one of the huge holes that form the homestead. Luke goes over to the edge and sees his Aunt Beru standing in the main courtyard.
+    text: A voice calls out from one of the huge holes that form the homestead. Luke goes over to the edge and sees his Aunt Beru standing in the main courtyard.
   - type: Dialogue
     character: BERU
-    content: Luke, tell Owen that if he gets a translator to be sure it speaks Bocce.
+    text: Luke, tell Owen that if he gets a translator to be sure it speaks Bocce.
   - type: Dialogue
     character: LUKE
-    content: It looks like we don't have much of a choice but I'll remind him. Luke returns to his uncle as they look over the equipment for sale with the Jawa leader.
+    text: It looks like we don't have much of a choice but I'll remind him. Luke returns to his uncle as they look over the equipment for sale with the Jawa leader.
   - type: Dialogue
     character: OWEN
-    content: I have no need for a protocol droid.
+    text: I have no need for a protocol droid.
   - type: Parenthetical
     character: THREEPIO
-    content: quickly
+    text: quickly
   - type: Dialogue
     character: THREEPIO
-    content: Sir -- not in an environment such as this -- that's why I've also secondary functions that...
+    text: Sir -- not in an environment such as this -- that's why I've also secondary functions that...
   - type: Dialogue
     character: OWEN
-    content: What I really need is a droid that understands the binary language of moisture vaporators.
+    text: What I really need is a droid that understands the binary language of moisture vaporators.
   - type: Dialogue
     character: THREEPIO
-    content: Vaporators! Sir -- My first job was programming binary load lifter... very similar to your vaporators. You could say...
+    text: Vaporators! Sir -- My first job was programming binary load lifter... very similar to your vaporators. You could say...
   - type: Dialogue
     character: OWEN
-    content: Do you speak Bocce?
+    text: Do you speak Bocce?
   - type: Dialogue
     character: THREEPIO
-    content: Of course I can, sir. It's like a second language for me... I'm as fluent in Bocce...
+    text: Of course I can, sir. It's like a second language for me... I'm as fluent in Bocce...
   - type: Dialogue
     character: OWEN
-    content: All right shut up!
+    text: All right shut up!
   - type: Parenthetical
     character: OWEN
-    content: turning to Jawa
+    text: turning to Jawa
   - type: Dialogue
     character: OWEN
-    content: I'll take this one.
+    text: I'll take this one.
   - type: Dialogue
     character: THREEPIO
-    content: Shutting up, sir.
+    text: Shutting up, sir.
   - type: Dialogue
     character: OWEN
-    content: Luke, take these two over to the garage, will you? I want you to have both of them cleaned up before dinner.
+    text: Luke, take these two over to the garage, will you? I want you to have both of them cleaned up before dinner.
   - type: Dialogue
     character: LUKE
-    content: But I was going into Toshi Station to pick up some power converters...
+    text: But I was going into Toshi Station to pick up some power converters...
   - type: Dialogue
     character: OWEN
-    content: You can waste time with your friends when your chores are done. Now come on, get to it!
+    text: You can waste time with your friends when your chores are done. Now come on, get to it!
   - type: Dialogue
     character: LUKE
-    content: All right, come on! And the red one, come on. Well, come on, Red, let's go.
+    text: All right, come on! And the red one, come on. Well, come on, Red, let's go.
   - type: Action
-    content: As the Jawas start to lead the three remaining robots back into the Sandcrawler, Artoo lets out a pathetic little beep and starts after his old friend Threepio. He is restrained by a slimy Jawa, who zaps him with a control box.
+    text: As the Jawas start to lead the three remaining robots back into the Sandcrawler, Artoo lets out a pathetic little beep and starts after his old friend Threepio. He is restrained by a slimy Jawa, who zaps him with a control box.
   - type: Action
-    content: Owen is negotiating with the head Jawa. Luke and the two robots start off for the garage when a plate pops off the head of the red astro-droid's head plate and it sparks wildly.
+    text: Owen is negotiating with the head Jawa. Luke and the two robots start off for the garage when a plate pops off the head of the red astro-droid's head plate and it sparks wildly.
   - type: Dialogue
     character: LUKE
-    content: Uncle Owen...
+    text: Uncle Owen...
   - type: Dialogue
     character: OWEN
-    content: Yeah?
+    text: Yeah?
   - type: Dialogue
     character: LUKE
-    content: This R2 unit has a bad motivator. Look!
+    text: This R2 unit has a bad motivator. Look!
   - type: Parenthetical
     character: OWEN
-    content: to the head Jawa
+    text: to the head Jawa
   - type: Dialogue
     character: OWEN
-    content: Hey, what're you trying to push on us?
+    text: Hey, what're you trying to push on us?
   - type: Action
-    content: The Jawa goes into a loud spiel. Meanwhile, Artoo has sneaked out of line and is moving up and down trying to attract attention. He lets out with a low whistle. Threepio taps Luke on the shoulder.
+    text: The Jawa goes into a loud spiel. Meanwhile, Artoo has sneaked out of line and is moving up and down trying to attract attention. He lets out with a low whistle. Threepio taps Luke on the shoulder.
   - type: Parenthetical
     character: THREEPIO
-    content: pointing to Artoo
+    text: pointing to Artoo
   - type: Dialogue
     character: THREEPIO
-    content: Excuse me, sir, but that R2 unit is in prime condition. A real bargain.
+    text: Excuse me, sir, but that R2 unit is in prime condition. A real bargain.
   - type: Dialogue
     character: LUKE
-    content: Uncle Owen...
+    text: Uncle Owen...
   - type: Dialogue
     character: OWEN
-    content: Yeah?
+    text: Yeah?
   - type: Dialogue
     character: LUKE
-    content: What about that one?
+    text: What about that one?
   - type: Parenthetical
     character: OWEN
-    content: to Jawa
+    text: to Jawa
   - type: Dialogue
     character: OWEN
-    content: What about that blue one? We'll take that one.
+    text: What about that blue one? We'll take that one.
   - type: Action
-    content: With a little reluctance the scruffy dwarf trades the damaged astro-droid for Artoo.
+    text: With a little reluctance the scruffy dwarf trades the damaged astro-droid for Artoo.
   - type: Dialogue
     character: LUKE
-    content: Yeah, take it away.
+    text: Yeah, take it away.
   - type: Dialogue
     character: THREEPIO
-    content: Uh, I'm quite sure you'll be very pleased with that one, sir. He really is in first-class condition. I've worked with him before. Here he comes.
+    text: Uh, I'm quite sure you'll be very pleased with that one, sir. He really is in first-class condition. I've worked with him before. Here he comes.
   - type: Action
-    content: Owen pays off the whining Jawa as Luke and the two robots trudge off toward a grimy homestead entry.
+    text: Owen pays off the whining Jawa as Luke and the two robots trudge off toward a grimy homestead entry.
   - type: Dialogue
     character: LUKE
-    content: Okay, let's go.
+    text: Okay, let's go.
   - type: Parenthetical
     character: THREEPIO
-    content: to Artoo
+    text: to Artoo
   - type: Dialogue
     character: THREEPIO
-    content: Now, don't you forget this! Why I should stick my neck out for you is quite beyond my capacity!
+    text: Now, don't you forget this! Why I should stick my neck out for you is quite beyond my capacity!
   - type: Slug
-    content: INT. LARS HOMESTEAD - GARAGE AREA - LATE AFTERNOON
+    text: INT. LARS HOMESTEAD - GARAGE AREA - LATE AFTERNOON
   - type: Action
-    content: The garage is cluttered and worn, but a friendly peaceful atmosphere permeates the low grey chamber. Threepio lowers himself into a large tub filled with warm oil. Near the battered Landspeeder little Artoo rests on a large battery with a cord to his face.
+    text: The garage is cluttered and worn, but a friendly peaceful atmosphere permeates the low grey chamber. Threepio lowers himself into a large tub filled with warm oil. Near the battered Landspeeder little Artoo rests on a large battery with a cord to his face.
   - type: Dialogue
     character: THREEPIO
-    content: Thank the maker! This oil bath is going to feel so good. I've got such a bad case of dust contamination, I can barely move!
+    text: Thank the maker! This oil bath is going to feel so good. I've got such a bad case of dust contamination, I can barely move!
   - type: Action
-    content: Artoo beeps a muffled reply. Luke seems to be lost in thought as he runs his hand over the damaged fin of a small two-man Skyhopper spaceship resting in a low hangar off the garage. Finally Luke's frustrations get the better of him and he slams a wrench across the workbench.
+    text: Artoo beeps a muffled reply. Luke seems to be lost in thought as he runs his hand over the damaged fin of a small two-man Skyhopper spaceship resting in a low hangar off the garage. Finally Luke's frustrations get the better of him and he slams a wrench across the workbench.
   - type: Dialogue
     character: LUKE
-    content: It just isn't fair. Oh, Biggs is right. I'm never gonna get out of here!
+    text: It just isn't fair. Oh, Biggs is right. I'm never gonna get out of here!
   - type: Dialogue
     character: THREEPIO
-    content: Is there anything I might do to help?
+    text: Is there anything I might do to help?
   - type: Action
-    content: Luke glances at the battered robot. A bit of his anger drains and a tiny smile creeps across his face.
+    text: Luke glances at the battered robot. A bit of his anger drains and a tiny smile creeps across his face.
   - type: Dialogue
     character: LUKE
-    content: Well, not unless you can alter time, speed up the harvest, or teleport me off this rock!
+    text: Well, not unless you can alter time, speed up the harvest, or teleport me off this rock!
   - type: Dialogue
     character: THREEPIO
-    content: I don't think so, sir. I'm only a droid and not very knowledgeable about such things. Not on this planet, anyways. As a matter of fact, I'm not even sure which planet I'm on.
+    text: I don't think so, sir. I'm only a droid and not very knowledgeable about such things. Not on this planet, anyways. As a matter of fact, I'm not even sure which planet I'm on.
   - type: Dialogue
     character: LUKE
-    content: Well, if there's a bright center to the universe, you're on the planet that it's farthest from.
+    text: Well, if there's a bright center to the universe, you're on the planet that it's farthest from.
   - type: Dialogue
     character: THREEPIO
-    content: I see, sir.
+    text: I see, sir.
   - type: Dialogue
     character: LUKE
-    content: Uh, you can call me Luke.
+    text: Uh, you can call me Luke.
   - type: Dialogue
     character: THREEPIO
-    content: I see, sir Luke.
+    text: I see, sir Luke.
   - type: Parenthetical
     character: LUKE
-    content: laughing
+    text: laughing
   - type: Dialogue
     character: LUKE
-    content: Just Luke.
+    text: Just Luke.
   - type: Dialogue
     character: THREEPIO
-    content: And I am See-Threepio, human-cyborg relations, and this is my counterpart, Artoo-Detoo.
+    text: And I am See-Threepio, human-cyborg relations, and this is my counterpart, Artoo-Detoo.
   - type: Dialogue
     character: LUKE
-    content: Hello.
+    text: Hello.
   - type: Action
-    content: Artoo beeps in response. Luke unplugs Artoo and begins to scrape several connectors on the robot's head with a chrome pick. Threepio climbs out of the oil tub and begins wiping oil from his bronze body.
+    text: Artoo beeps in response. Luke unplugs Artoo and begins to scrape several connectors on the robot's head with a chrome pick. Threepio climbs out of the oil tub and begins wiping oil from his bronze body.
   - type: Dialogue
     character: LUKE
-    content: You got a lot of carbon scoring here. It looks like you boys have seen a lot of action.
+    text: You got a lot of carbon scoring here. It looks like you boys have seen a lot of action.
   - type: Dialogue
     character: THREEPIO
-    content: With all we've been through, sometimes I'm amazed we're in as good condition as we are, what with the Rebellion and all.
+    text: With all we've been through, sometimes I'm amazed we're in as good condition as we are, what with the Rebellion and all.
   - type: Dialogue
     character: LUKE
-    content: You know of the Rebellion against the Empire?
+    text: You know of the Rebellion against the Empire?
   - type: Dialogue
     character: THREEPIO
-    content: That's how we came to be in your service, if you take my meaning, sir.
+    text: That's how we came to be in your service, if you take my meaning, sir.
   - type: Dialogue
     character: LUKE
-    content: Have you been in many battles?
+    text: Have you been in many battles?
   - type: Dialogue
     character: THREEPIO
-    content: Several, I think. Actually, there's not much to tell. I'm not much more than an interpreter, and not very good at telling stories. Well, not at making them interesting, anyways.
+    text: Several, I think. Actually, there's not much to tell. I'm not much more than an interpreter, and not very good at telling stories. Well, not at making them interesting, anyways.
   - type: Action
-    content: Luke struggles to remove a small metal fragment from Artoo's neck joint. He uses a larger pick.
+    text: Luke struggles to remove a small metal fragment from Artoo's neck joint. He uses a larger pick.
   - type: Dialogue
     character: LUKE
-    content: Well, my little friend, you've got something jammed in here real good. Were you on a cruiser or...
+    text: Well, my little friend, you've got something jammed in here real good. Were you on a cruiser or...
   - type: Action
-    content: The fragment breaks loose with a snap, sending Luke tumbling head over heels. He sits up and sees a twelve-inch threedimensional hologram of Leia Organa, the Rebel senator, being projected from the face of little Artoo. The image is a rainbow of colors as it flickers and jiggles in the dimly lit garage. Luke's mouth hangs open in awe.
+    text: The fragment breaks loose with a snap, sending Luke tumbling head over heels. He sits up and sees a twelve-inch threedimensional hologram of Leia Organa, the Rebel senator, being projected from the face of little Artoo. The image is a rainbow of colors as it flickers and jiggles in the dimly lit garage. Luke's mouth hangs open in awe.
   - type: Dialogue
     character: LEIA
-    content: Help me, Obi-Wan Kenobi. You're my only hope.
+    text: Help me, Obi-Wan Kenobi. You're my only hope.
   - type: Dialogue
     character: LUKE
-    content: What's this?
+    text: What's this?
   - type: Action
-    content: Artoo looks around and sheepishly beeps an answer for Threepio to translate. Leia continues to repeat the sentence fragment over and over.
+    text: Artoo looks around and sheepishly beeps an answer for Threepio to translate. Leia continues to repeat the sentence fragment over and over.
   - type: Dialogue
     character: THREEPIO
-    content: What is what?!? He asked you a question...
+    text: What is what?!? He asked you a question...
   - type: Parenthetical
     character: THREEPIO
-    content: pointing to Leia
+    text: pointing to Leia
   - type: Dialogue
     character: THREEPIO
-    content: What is that?
+    text: What is that?
   - type: Action
-    content: Artoo whistles his surprise as he pretends to just notice the hologram. He looks around and sheepishly beeps an answer for Threepio to translate. Leia continues to repeat the sentence fragment over and over.
+    text: Artoo whistles his surprise as he pretends to just notice the hologram. He looks around and sheepishly beeps an answer for Threepio to translate. Leia continues to repeat the sentence fragment over and over.
   - type: Dialogue
     character: LEIA
-    content: Help me, Obi-Wan Kenobi. You're my only hope. Help me, Obi-Wan Kenobi. You're my only hope.
+    text: Help me, Obi-Wan Kenobi. You're my only hope. Help me, Obi-Wan Kenobi. You're my only hope.
   - type: Dialogue
     character: THREEPIO
-    content: Oh, he says it's nothing, sir. Merely a malfunction. Old data. Pay it no mind. Luke becomes intrigued by the beautiful girl.
+    text: Oh, he says it's nothing, sir. Merely a malfunction. Old data. Pay it no mind. Luke becomes intrigued by the beautiful girl.
   - type: Dialogue
     character: LUKE
-    content: Who is she? She's beautiful.
+    text: Who is she? She's beautiful.
   - type: Dialogue
     character: THREEPIO
-    content: I'm afraid I'm not quite sure, sir.
+    text: I'm afraid I'm not quite sure, sir.
   - type: Dialogue
     character: LEIA
-    content: Help me, Obi-Wan Kenobi...
+    text: Help me, Obi-Wan Kenobi...
   - type: Dialogue
     character: THREEPIO
-    content: I think she was a passenger on our last voyage. A person of some importance, sir -- I believe. Our captain was attached to...
+    text: I think she was a passenger on our last voyage. A person of some importance, sir -- I believe. Our captain was attached to...
   - type: Dialogue
     character: LUKE
-    content: Is there more to this recording?
+    text: Is there more to this recording?
   - type: Action
-    content: Luke reaches out for Artoo but he lets out several frantic squeaks and a whistle.
+    text: Luke reaches out for Artoo but he lets out several frantic squeaks and a whistle.
   - type: Dialogue
     character: THREEPIO
-    content: Behave yourself, Artoo. You're going to get us in trouble. It's all right, you can trust him. He's our new master.
+    text: Behave yourself, Artoo. You're going to get us in trouble. It's all right, you can trust him. He's our new master.
   - type: Action
-    content: Artoo whistles and beeps a long message to Threepio.
+    text: Artoo whistles and beeps a long message to Threepio.
   - type: Dialogue
     character: THREEPIO
-    content: He says he's the property of Obi-Wan Kenobi, a resident of these parts. And it's a private message for him. Quite frankly, sir I don't know what he's talking about. Our last master was Captain Antilles, but with what we've been through, this little R2 unit has become a bit eccentric.
+    text: He says he's the property of Obi-Wan Kenobi, a resident of these parts. And it's a private message for him. Quite frankly, sir I don't know what he's talking about. Our last master was Captain Antilles, but with what we've been through, this little R2 unit has become a bit eccentric.
   - type: Dialogue
     character: LUKE
-    content: Obi-Wan Kenobi? I wonder if he means old Ben Kenobi?
+    text: Obi-Wan Kenobi? I wonder if he means old Ben Kenobi?
   - type: Dialogue
     character: THREEPIO
-    content: I beg your pardon, sir, but do you know what he's talking about?
+    text: I beg your pardon, sir, but do you know what he's talking about?
   - type: Dialogue
     character: LUKE
-    content: Well, I don't know anyone named Obi-Wan, but old Ben lives out beyond the dune sea. He's kind of a strange old hermit.
+    text: Well, I don't know anyone named Obi-Wan, but old Ben lives out beyond the dune sea. He's kind of a strange old hermit.
   - type: Action
-    content: Luke's gazes at the beautiful young princess for a few moments.
+    text: Luke's gazes at the beautiful young princess for a few moments.
   - type: Dialogue
     character: LUKE
-    content: I wonder who she is. It sounds like she's in trouble. I'd better play back the whole thing. Artoo beeps something to Threepio.
+    text: I wonder who she is. It sounds like she's in trouble. I'd better play back the whole thing. Artoo beeps something to Threepio.
   - type: Dialogue
     character: THREEPIO
-    content: He says the restraining bolt has short circuited his recording system. He suggests that if you remove the bolt, he might be able to play back the entire recording. Luke looks longingly at the lovely, little princess and hasn't really heard what Threepio has been saying.
+    text: He says the restraining bolt has short circuited his recording system. He suggests that if you remove the bolt, he might be able to play back the entire recording. Luke looks longingly at the lovely, little princess and hasn't really heard what Threepio has been saying.
   - type: Dialogue
     character: LUKE
-    content: H'm? Oh, yeah, well, I guess you're too small to run away on me if I take this off! Okay.
+    text: H'm? Oh, yeah, well, I guess you're too small to run away on me if I take this off! Okay.
   - type: Action
-    content: Luke takes a wedged bar and pops the restraining bolt off Artoo's side.
+    text: Luke takes a wedged bar and pops the restraining bolt off Artoo's side.
   - type: Dialogue
     character: LUKE
-    content: There you go.
+    text: There you go.
   - type: Action
-    content: The princess immediately disappears...
+    text: The princess immediately disappears...
   - type: Dialogue
     character: LUKE
-    content: Well, wait a minute. Where'd she go? Bring her back! Play back the entire message.
+    text: Well, wait a minute. Where'd she go? Bring her back! Play back the entire message.
   - type: Action
-    content: Artoo beeps an innocent reply as Threepio sits up in embarrassment.
+    text: Artoo beeps an innocent reply as Threepio sits up in embarrassment.
   - type: Dialogue
     character: THREEPIO
-    content: What message? The one you're carrying inside your rusty innards!
+    text: What message? The one you're carrying inside your rusty innards!
   - type: Action
-    content: A women's voice calls out from another room.
+    text: A women's voice calls out from another room.
   - type: Dialogue
     character: BERU
-    content: Luke? Luke! Come to dinner!
+    text: Luke? Luke! Come to dinner!
   - type: Action
-    content: Luke stands up and shakes his head at the malfunctioning robot.
+    text: Luke stands up and shakes his head at the malfunctioning robot.
   - type: Dialogue
     character: LUKE
-    content: All right, I'll be right there, Aunt Beru.
+    text: All right, I'll be right there, Aunt Beru.
   - type: Dialogue
     character: THREEPIO
-    content: I'm sorry, sir, but he appears to have picked up a slight flutter.
+    text: I'm sorry, sir, but he appears to have picked up a slight flutter.
   - type: Action
-    content: Luke tosses Artoo's restraining bolt on the workbench and hurries out of the room.
+    text: Luke tosses Artoo's restraining bolt on the workbench and hurries out of the room.
   - type: Dialogue
     character: LUKE
-    content: Well, see what you can do with him. I'll be right back.
+    text: Well, see what you can do with him. I'll be right back.
   - type: Parenthetical
     character: THREEPIO
-    content: to Artoo
+    text: to Artoo
   - type: Dialogue
     character: THREEPIO
-    content: Just you reconsider playing that message for him.
+    text: Just you reconsider playing that message for him.
   - type: Action
-    content: Artoo beeps in response.
+    text: Artoo beeps in response.
   - type: Dialogue
     character: THREEPIO
-    content: No, I don't think he likes you at all.
+    text: No, I don't think he likes you at all.
   - type: Action
-    content: Artoo beeps.
+    text: Artoo beeps.
   - type: Dialogue
     character: THREEPIO
-    content: No, I don't like you either.
+    text: No, I don't like you either.

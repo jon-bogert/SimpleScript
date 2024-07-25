@@ -24,9 +24,12 @@ public:
     void Shutdown();
 
     float GetScroll() const { return m_scroll; }
+    void UpdateScroll(float amt);
 
     Project* GetActiveProject();
     const Project* GetActiveProject() const;
+
+    Editor* GetEditor() { return m_editor.get(); }
 
 private:
     WindowManager m_windowManager;
