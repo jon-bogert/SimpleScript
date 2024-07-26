@@ -28,5 +28,5 @@ private:
 
 	size_t m_displayIndex = 0;
 	float m_scrollOffset = 0;
-	float m_scrollFactor = 3.f;
+	float m_scrollFactor = 15.f;
 };

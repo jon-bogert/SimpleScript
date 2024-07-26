@@ -20,6 +20,8 @@ public:
     uint32_t ColorBarWidth() const { return m_colorBarWidth; }
     uint32_t BodyYOffset() const { return m_bodyYOffset; }
     uint32_t BodyPadding() const { return m_bodyPadding; }
+    uint32_t BodyBackgroundMaxLevel() const { return m_bodyBackgroundMaxLevel; }
+    uint32_t BlockGap() const { return m_blockGap; }
 
 private:
 
@@ -30,4 +32,6 @@ private:
     uint32_t m_colorBarWidth = 7;
     uint32_t m_bodyYOffset = 5;
     uint32_t m_bodyPadding = 10;
+    uint32_t m_bodyBackgroundMaxLevel = 30;
+    uint32_t m_blockGap = 10;
 };

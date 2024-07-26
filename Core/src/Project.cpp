@@ -84,20 +84,20 @@ void Project::RenderTo(sf::RenderTexture* renderTarget)
 		m_blocks[i]->RenderTo(renderTarget);
 	}
 
-	sf::Text debugText;
-	debugText.setFont(Style::Get().BodyFont());
-	debugText.setCharacterSize(10);
-	debugText.setFillColor({ 255, 0, 255, 255 });
-	debugText.setString("Begin: " + std::to_string(m_activeBlocksBegin)
-		+ "\nSize: " + std::to_string(m_activeBlocksSize)
-	    + "\nHeight: " + std::to_string(m_blocks[m_activeBlocksBegin]->GetHeight())
-		+ "\nOffset: " + std::to_string(m_scrollOffset));
-	sf::RectangleShape debugBG;
-	debugBG.setSize(debugText.getLocalBounds().getSize() + sf::Vector2f(5.f, 5.f));
-	debugBG.setFillColor({ 0, 0, 0, 195 });
-
-	renderTarget->draw(debugBG);
-	renderTarget->draw(debugText);
+	//sf::Text debugText;
+	//debugText.setFont(Style::Get().BodyFont());
+	//debugText.setCharacterSize(10);
+	//debugText.setFillColor({ 255, 0, 255, 255 });
+	//debugText.setString("Begin: " + std::to_string(m_activeBlocksBegin)
+	//	+ "\nSize: " + std::to_string(m_activeBlocksSize)
+	//    + "\nHeight: " + std::to_string(m_blocks[m_activeBlocksBegin]->GetHeight())
+	//	+ "\nOffset: " + std::to_string(m_scrollOffset));
+	//sf::RectangleShape debugBG;
+	//debugBG.setSize(debugText.getLocalBounds().getSize() + sf::Vector2f(5.f, 5.f));
+	//debugBG.setFillColor({ 0, 0, 0, 195 });
+	//
+	//renderTarget->draw(debugBG);
+	//renderTarget->draw(debugText);
 }
 
 void Project::Resize(uint32_t width, uint32_t height)
@@ -113,17 +113,19 @@ void Project::OnScroll(float amt, bool doRecalc)
 	if (m_activeBlocksBegin == 0 && m_scrollOffset < 0.f)
 		m_scrollOffset = 0.f;
 
+	float blockGap = Style::Get().BlockGap();
+
 	// Check beginning
 	if (m_scrollOffset < 0.f)
 	{
 		--m_activeBlocksBegin;
 		++m_activeBlocksSize;
 		m_blocks[m_activeBlocksBegin]->Recalculate();
-		m_scrollOffset += m_blocks[m_activeBlocksBegin]->GetHeight();
+		m_scrollOffset += m_blocks[m_activeBlocksBegin]->GetHeight() + blockGap;
 	}
-	if (m_scrollOffset >= m_blocks[m_activeBlocksBegin]->GetHeight())
+	if (m_scrollOffset >= m_blocks[m_activeBlocksBegin]->GetHeight() + blockGap)
 	{
-		m_scrollOffset -= m_blocks[m_activeBlocksBegin]->GetHeight();
+		m_scrollOffset -= m_blocks[m_activeBlocksBegin]->GetHeight() + blockGap;
 		++m_activeBlocksBegin;
 		--m_activeBlocksSize;
 	}
@@ -143,11 +145,10 @@ void Project::OnScroll(float amt, bool doRecalc)
 		}
 
 		m_blocks[m_activeBlocksBegin + i]->SetYPosition(currY);
-		currY += (float)m_blocks[m_activeBlocksBegin + i]->GetHeight();
+		currY += (float)m_blocks[m_activeBlocksBegin + i]->GetHeight() + blockGap;
 	}
 
 	//Extend the end
-	//float currY = (float)heightSoFar - m_scrollOffset;
 	while (currY < m_viewportHeight)
 	{
 		size_t next = m_activeBlocksBegin + m_activeBlocksSize;
@@ -161,6 +162,6 @@ void Project::OnScroll(float amt, bool doRecalc)
 		++m_activeBlocksSize;
 		m_blocks[next]->Recalculate();
 		m_blocks[next]->SetYPosition(currY);
-		currY += (float)m_blocks[next]->GetHeight();
+		currY += (float)m_blocks[next]->GetHeight() + blockGap;
 	}
 }

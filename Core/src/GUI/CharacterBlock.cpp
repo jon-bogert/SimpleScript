@@ -115,7 +115,15 @@ void CharacterBlock::Recalculate()
 
 	m_renderTarget.create(s_boundsInfo.maxWidth, m_height);
 
-	m_renderTarget.clear({ 20, 20, 20, 255 });
+	CharacterManifest& characters = CharacterManifest::Get();
+	sf::Color color = (!characters.contains(m_characterName)) ? sf::Color(20, 20, 20, 255) : CharacterManifest::Get()[m_characterName].color;
+	sf::Color bgColor = color;
+	int highest = std::max(bgColor.r, std::max(bgColor.g, bgColor.b));
+	float factor = (Style::Get().BodyBackgroundMaxLevel() / (float)highest);
+	bgColor.r *= factor;
+	bgColor.g *= factor;
+	bgColor.b *= factor;
+	m_renderTarget.clear(bgColor);
 
 	sf::Vector2f cursor = { 0.f, 0.f };
 
@@ -141,8 +149,6 @@ void CharacterBlock::Recalculate()
 	m_renderTarget.draw(m_textVisual);
 
 	m_colorBar.setSize({ (float)Style::Get().ColorBarWidth(), (float)m_height });
-	CharacterManifest& characters = CharacterManifest::Get();
-	sf::Color color = (!characters.contains(m_characterName)) ? sf::Color(20, 20, 20, 255) : CharacterManifest::Get()[m_characterName].color;
 	m_colorBar.setFillColor(color);
 	m_renderTarget.draw(m_colorBar);
 
