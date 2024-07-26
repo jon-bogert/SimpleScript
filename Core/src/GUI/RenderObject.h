@@ -29,10 +29,10 @@ public:
 
 		int64_t bodyWidth = maxWidth;
 		bodyWidth -= (int64_t)Style::Get().ColorBarWidth()
-			- Style::Get().BodyYOffset()
-			- Style::Get().BodyPadding() * 4;
+			+ Style::Get().BodyYOffset()
+			+ Style::Get().BodyPadding() * 2;
 
-		while (testText.getLocalBounds().width <= bodyWidth)
+		while (testText.getLocalBounds().width < bodyWidth)
 		{
 			std::string str = testText.getString();
 			s_boundsInfo.maxChar = str.size();
