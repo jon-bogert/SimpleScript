@@ -78,18 +78,89 @@ void Project::Load(const std::filesystem::path& filepath)
 
 void Project::RenderTo(sf::RenderTexture* renderTarget)
 {
-	uint32_t offset = 0;
-	for (auto& block : m_blocks)
+	size_t end = m_activeBlocksBegin + m_activeBlocksSize;
+	for (size_t i = m_activeBlocksBegin; i < end; ++i)
 	{
-		block->SetOffset(offset);
-		block->RenderTo(renderTarget);
+		m_blocks[i]->RenderTo(renderTarget);
 	}
+
+	sf::Text debugText;
+	debugText.setFont(Style::Get().BodyFont());
+	debugText.setCharacterSize(10);
+	debugText.setFillColor({ 255, 0, 255, 255 });
+	debugText.setString("Begin: " + std::to_string(m_activeBlocksBegin)
+		+ "\nSize: " + std::to_string(m_activeBlocksSize)
+	    + "\nHeight: " + std::to_string(m_blocks[m_activeBlocksBegin]->GetHeight())
+		+ "\nOffset: " + std::to_string(m_scrollOffset));
+	sf::RectangleShape debugBG;
+	debugBG.setSize(debugText.getLocalBounds().getSize() + sf::Vector2f(5.f, 5.f));
+	debugBG.setFillColor({ 0, 0, 0, 195 });
+
+	renderTarget->draw(debugBG);
+	renderTarget->draw(debugText);
 }
 
 void Project::Resize(uint32_t width, uint32_t height)
 {
-	for (auto& block : m_blocks)
+	RenderObject::ChangeWidth(width);
+	m_viewportHeight = height;
+	OnScroll(0.f, true);
+}
+
+void Project::OnScroll(float amt, bool doRecalc)
+{
+	m_scrollOffset -= amt * m_scrollFactor;
+	if (m_activeBlocksBegin == 0 && m_scrollOffset < 0.f)
+		m_scrollOffset = 0.f;
+
+	// Check beginning
+	if (m_scrollOffset < 0.f)
 	{
-		block->ChangeWidth(width);
+		--m_activeBlocksBegin;
+		++m_activeBlocksSize;
+		m_blocks[m_activeBlocksBegin]->Recalculate();
+		m_scrollOffset += m_blocks[m_activeBlocksBegin]->GetHeight();
+	}
+	if (m_scrollOffset >= m_blocks[m_activeBlocksBegin]->GetHeight())
+	{
+		m_scrollOffset -= m_blocks[m_activeBlocksBegin]->GetHeight();
+		++m_activeBlocksBegin;
+		--m_activeBlocksSize;
+	}
+
+	// Trim the end
+	float currY = -m_scrollOffset;
+	for (size_t i = 0; i < m_activeBlocksSize; ++i)
+	{
+		if (currY > m_viewportHeight)
+		{
+			m_activeBlocksSize = i;
+			break;
+		}
+		if (doRecalc)
+		{
+			m_blocks[m_activeBlocksBegin + i]->Recalculate();
+		}
+
+		m_blocks[m_activeBlocksBegin + i]->SetYPosition(currY);
+		currY += (float)m_blocks[m_activeBlocksBegin + i]->GetHeight();
+	}
+
+	//Extend the end
+	//float currY = (float)heightSoFar - m_scrollOffset;
+	while (currY < m_viewportHeight)
+	{
+		size_t next = m_activeBlocksBegin + m_activeBlocksSize;
+		if (next >= m_blocks.size()) // prevent going past end
+		{
+			float endDelta = m_viewportHeight - currY;
+			OnScroll(endDelta / m_scrollFactor);
+			return;
+		}
+
+		++m_activeBlocksSize;
+		m_blocks[next]->Recalculate();
+		m_blocks[next]->SetYPosition(currY);
+		currY += (float)m_blocks[next]->GetHeight();
 	}
 }

@@ -69,7 +69,9 @@ void WindowManager::Update()
 		}
 		if (event.type == sf::Event::MouseWheelScrolled)
 		{
-			Application::Get().UpdateScroll(-event.mouseWheelScroll.delta * 2.f);
+			//Application::Get().UpdateScroll(-event.mouseWheelScroll.delta * 2.f);
+			if (m_scrollCallback != nullptr)
+				m_scrollCallback(event.mouseWheelScroll.delta);
 		}
 	}
 
@@ -129,6 +131,11 @@ void WindowManager::SetEditor(Editor* editor)
 void WindowManager::SetResizeCallback(const std::function<void(uint32_t, uint32_t)>& resizeCallback)
 {
 	m_resizeCallback = resizeCallback;
+}
+
+void WindowManager::SetScrollCallback(const std::function<void(float)>& scrollCallback)
+{
+	m_scrollCallback = scrollCallback;
 }
 
 void WindowManager::SaveSettings()

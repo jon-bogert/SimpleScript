@@ -19,40 +19,7 @@ void CharacterBlock::Start(uint32_t maxWidth)
 
 	m_headerBar.setFillColor({ 50, 50, 50, 255 });
 
-    ChangeWidth(maxWidth);
-}
-
-void CharacterBlock::ChangeWidth(uint32_t maxWidth)
-{
-    sf::Text testText;
-    testText.setFont(Style::Get().BodyFont());
-    testText.setCharacterSize(Style::Get().BodyFontSize());
-
-	Style& style = Style::Get();
-
-	int64_t bodyWidth = maxWidth;
-	bodyWidth -= (int64_t)Style::Get().ColorBarWidth()
-		- Style::Get().BodyYOffset()
-		- Style::Get().BodyPadding() * 4;
-
-    while (testText.getLocalBounds().width <= bodyWidth)
-    {
-		std::string str = testText.getString();
-        m_charMax = str.size();
-
-		str.push_back('0');
-		testText.setString(str);
-    }
-
-	size_t length = testText.getString().getSize();
-
-	if (length > 1)
-		m_charMax = testText.getString().getSize() - 1;
-	else
-		m_charMax = 1;
-
-	m_maxWidth = maxWidth;
-	Recalculate();
+    //ChangeWidth(maxWidth);
 }
 
 std::string CharacterBlock::GetText() const
@@ -86,9 +53,13 @@ std::string CharacterBlock::GetCharacter() const
 	return m_characterName;
 }
 
+void CharacterBlock::SetYPosition(const float y)
+{
+	m_sprite.setPosition({ m_sprite.getPosition().x, y });
+}
+
 void CharacterBlock::RenderTo(sf::RenderTexture* renderTarget)
 {
-	m_sprite.setPosition({ 0.f, (float)m_offset + Application::Get().GetScroll()});
 	renderTarget->draw(m_sprite);
 }
 
@@ -114,7 +85,7 @@ void CharacterBlock::Recalculate()
 	while (std::getline(stream, word, ' '))
 	{
 		counter += word.length();
-		if (counter + 1 > m_charMax)
+		if (counter + 1 > s_boundsInfo.maxChar)
 		{
 			formatted.append(currLine + "\n");
 			counter = word.length();
@@ -142,7 +113,7 @@ void CharacterBlock::Recalculate()
 		+ m_headerVisual.getCharacterSize() * 0.5f
 		+ Style::Get().BodyPadding() * 4.f;
 
-	m_renderTarget.create(m_maxWidth, m_height);
+	m_renderTarget.create(s_boundsInfo.maxWidth, m_height);
 
 	m_renderTarget.clear({ 20, 20, 20, 255 });
 

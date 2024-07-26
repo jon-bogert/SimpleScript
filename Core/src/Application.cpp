@@ -14,6 +14,7 @@ void Application::Start()
 	// TEMP
 	m_activeProject = std::make_unique<Project>();
 	m_activeProject->Start();
+	m_windowManager.SetScrollCallback([&](float amt) {m_activeProject->OnScroll(amt); });
 	m_activeProject->Load("example.yaml");
 	std::cout << "Done Load" << std::endl;
 }

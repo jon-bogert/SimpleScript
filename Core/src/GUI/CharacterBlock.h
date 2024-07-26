@@ -12,7 +12,6 @@ class CharacterBlock : public RenderObject
 {
 public:
 	void Start(uint32_t maxWidth);
-	void ChangeWidth(uint32_t maxWidth) override;
 
 	std::string GetText() const;
 	void SetText(const std::string& text);
@@ -21,17 +20,15 @@ public:
 	void SetCharacter(const std::string& name);
 	std::string GetCharacter() const;
 
+	void SetYPosition(const float y) override;
 	void RenderTo(sf::RenderTexture* renderTarget) override;
 
 	void SetRecalculateVisuals(const bool doRecalculation);
+	void Recalculate() override;
 
 private:
-	void Recalculate();
 
 	bool m_doRecalculate = true;
-
-	uint32_t m_maxWidth = 100;
-	uint32_t m_charMax = 100;
 
 	std::string m_contents;
 
