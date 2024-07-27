@@ -17,6 +17,8 @@ public:
 	void SetText(const std::string& text);
 	void AppendText(const std::string& text);
 
+	sf::Text& GetField() override;
+
 	void SetCharacter(const std::string& name);
 	std::string GetCharacter() const;
 
@@ -25,6 +27,8 @@ public:
 
 	void SetRecalculateVisuals(const bool doRecalculation);
 	void Recalculate() override;
+
+	bool PointCheck(const sf::Vector2f& point) const override;
 
 private:
 

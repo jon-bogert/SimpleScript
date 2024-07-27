@@ -38,6 +38,11 @@ void CharacterBlock::AppendText(const std::string& text)
 	m_contents += text;
 }
 
+sf::Text& CharacterBlock::GetField()
+{
+	return m_textVisual;
+}
+
 void CharacterBlock::SetCharacter(const std::string& name)
 {
     m_characterName = name;
@@ -154,4 +159,11 @@ void CharacterBlock::Recalculate()
 
 	m_renderTarget.display();
 	m_sprite.setTexture(m_renderTarget.getTexture(), true);
+}
+
+bool CharacterBlock::PointCheck(const sf::Vector2f& point) const
+{
+	sf::FloatRect bounds = m_sprite.getGlobalBounds();
+	return (point.x >= bounds.left && point.x <= bounds.left + bounds.width
+		&& point.y >= bounds.top && point.y <= bounds.top + bounds.height);
 }

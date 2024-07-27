@@ -11,6 +11,8 @@ void Application::Start()
 	m_editor = std::make_unique<Editor>();
 	m_windowManager.SetEditor(m_editor.get());
 
+	m_windowManager.SetLeftClickCallback([&]() { m_editor->GetTextEditor().SetCursorFromPointer(); });
+
 	// TEMP
 	m_activeProject = std::make_unique<Project>();
 	m_activeProject->Start();

@@ -73,6 +73,12 @@ void WindowManager::Update()
 			if (m_scrollCallback != nullptr)
 				m_scrollCallback(event.mouseWheelScroll.delta);
 		}
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			if (event.mouseButton.button == sf::Mouse::Left &&
+				m_leftClickCallback != nullptr)
+				m_leftClickCallback();
+		}
 	}
 
 	ImGui::SFML::Update(*m_window, m_deltaTimer.restart());
@@ -88,6 +94,7 @@ void WindowManager::Update()
 	if (Application::Get().GetActiveProject() != nullptr)
 	{
 		Application::Get().GetActiveProject()->RenderTo(&m_editor->GetViewport().GetRenderTarget());
+		Application::Get().GetEditor()->GetTextEditor().RenderTo(&m_editor->GetViewport().GetRenderTarget());
 	}
 	m_editor->GetViewport().GetRenderTarget().display();
 
@@ -136,6 +143,11 @@ void WindowManager::SetResizeCallback(const std::function<void(uint32_t, uint32_
 void WindowManager::SetScrollCallback(const std::function<void(float)>& scrollCallback)
 {
 	m_scrollCallback = scrollCallback;
+}
+
+void WindowManager::SetLeftClickCallback(const std::function<void(void)> leftClickCallback)
+{
+	m_leftClickCallback = leftClickCallback;
 }
 
 void WindowManager::SaveSettings()

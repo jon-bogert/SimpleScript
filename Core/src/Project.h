@@ -4,6 +4,7 @@
 #include "GUI/RenderObject.h"
 
 #include <filesystem>
+#include <functional>
 #include <deque>
 
 class Project
@@ -16,6 +17,8 @@ public:
 	void Resize(uint32_t width, uint32_t height);
 
 	void OnScroll(float amt, bool doRecalc = false);
+
+	std::vector<RenderObject*> GetActiveBlocks();
 
 private:
 	std::string m_name = "Untitled";

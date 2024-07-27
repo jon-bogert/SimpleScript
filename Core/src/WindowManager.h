@@ -25,14 +25,17 @@ public:
 	void SetEditor(Editor* editor);
 	void SetResizeCallback(const std::function<void(uint32_t, uint32_t)>& resizeCallback);
 	void SetScrollCallback(const std::function<void(float)>& scrollCallback);
+	void SetLeftClickCallback(const std::function<void(void)> leftClickCallback);
 
 private:
 	void SaveSettings();
 	bool LoadSettings(sf::Vector2u& out_size);
 
 	std::unique_ptr<sf::RenderWindow> m_window = nullptr;
+
 	std::function<void(uint32_t, uint32_t)> m_resizeCallback = nullptr;
 	std::function<void(float)> m_scrollCallback = nullptr;
+	std::function<void(void)> m_leftClickCallback = nullptr;
 
 	sf::Vector2u m_windowSize;
 

@@ -29,6 +29,9 @@ void Viewport::Update()
 		if (m_resizeCallback != nullptr)
 			m_resizeCallback((uint32_t)m_size.x, (uint32_t)m_size.y);
 	}
+
+	m_mousePosition = (sf::Vector2f)ImGui::GetMousePos() - (sf::Vector2f)ImGui::GetCursorPos();
+
 	ImGui::Image(m_renderTarget);
 
 	ImGui::End();

@@ -2,7 +2,7 @@
 
 #include "GUI/Style.h"
 
-#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics.hpp>
 
 class RenderObject
 {
@@ -10,6 +10,11 @@ public:
 	virtual void RenderTo(sf::RenderTexture* renderTarget) = 0;
 	virtual void SetYPosition(const float y) = 0;
 	virtual void Recalculate() = 0;
+
+	virtual std::string GetContent() const { return std::string(); }
+	virtual sf::Text& GetField() { return sf::Text(); }
+	virtual void SetContent(const std::string& content) {}
+	virtual bool PointCheck(const sf::Vector2f& point) const { return false; };
 
 	RenderObject() = default;
 	virtual ~RenderObject() {};

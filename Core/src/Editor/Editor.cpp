@@ -23,3 +23,8 @@ Viewport& Editor::GetViewport()
 {
 	return m_viewport;
 }
+
+TextEditor& Editor::GetTextEditor()
+{
+	return m_textEditor;
+}

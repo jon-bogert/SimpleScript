@@ -165,3 +165,13 @@ void Project::OnScroll(float amt, bool doRecalc)
 		currY += (float)m_blocks[next]->GetHeight() + blockGap;
 	}
 }
+
+std::vector<RenderObject*> Project::GetActiveBlocks()
+{
+	std::vector<RenderObject*> result(m_activeBlocksSize);
+	for (size_t i = 0; i < m_activeBlocksSize; ++i)
+	{
+		result[i] = m_blocks[m_activeBlocksBegin + i].get();
+	}
+	return result;
+}
