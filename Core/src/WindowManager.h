@@ -1,43 +1,50 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
+#include <imgui.h>
 
 #include <memory>
-#include <functional>
+#include <string>
+#include <vector>
 
-class Editor;
-
-class WindowManager
+class Window
 {
 public:
-	WindowManager() = default;
-	~WindowManager() { Shutdown(); }
+	Window() = default;
+	virtual ~Window() = default;
 
-	void Start(uint32_t width, uint32_t height);
-	void Update();
-	void Shutdown();
+	bool isOpen = true;
+	std::string name = "Window##";
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_None;
 
-	bool IsOpen() const;
-	void Close();
-
-	void SetEditor(Editor* editor);
-	void SetResizeCallback(const std::function<void(uint32_t, uint32_t)>& resizeCallback);
-	void SetScrollCallback(const std::function<void(float)>& scrollCallback);
-
-private:
-	void SaveSettings();
-	bool LoadSettings(sf::Vector2u& out_size);
-
-	std::unique_ptr<sf::RenderWindow> m_window = nullptr;
-	std::function<void(uint32_t, uint32_t)> m_resizeCallback = nullptr;
-	std::function<void(float)> m_scrollCallback = nullptr;
-
-	sf::Vector2u m_windowSize;
-
-	Editor* m_editor = nullptr;
-
-	sf::Clock m_deltaTimer;
+	virtual void Start() {}
+	virtual void PreUpdate() {}
+	virtual void Specs() {}			//To be called before ImGui::Begin()
+	virtual void OnGUI() = 0;		//'OnGUI' Must be overridden
+	virtual void PostUpdate() {}
+	virtual void Destroy() {}
 };
 
+class WindowManager final
+{
+	WindowManager() {}
+	static WindowManager& Get();
+	std::vector<std::unique_ptr<Window>> m_windows;
+
+public:
+	template <class WinType>
+	static WinType* NewWindow();
+
+	static void PreUpdate();
+	static void OnGUI();
+	static void PostUpdate();
+	static void Destroy();
+};
+
+template <class WinType>
+inline WinType* WindowManager::NewWindow()
+{
+	static_assert(std::is_base_of_v<Window, WinType>, "WindowManager: Cannot add Non-Window type");
+	Get().m_windows.push_back(std::make_unique<WinType>());
+	Get().m_windows.back()->Start();
+	return (WinType*)Get().m_windows.back().get();
+}

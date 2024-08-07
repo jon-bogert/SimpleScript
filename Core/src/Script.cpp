@@ -2,16 +2,25 @@
 
 #include "Application.h"
 #include "Debug.h"
-#include "Project.h"
+#include "FileBrowser.h"
+#include "Structs.h"
 #include "Util.h"
 
 #include <minidocx.hpp>
-#include <SFML/Graphics/RenderTexture.hpp>
 #include <yaml-cpp/yaml.h>
 
-void Script::AddBlock(TextBlock::Type type)
+#include <filesystem>
+#include <fstream>
+
+void Script::AddBlock(TextBlock::Type type, size_t index)
 {
-	TextBlock& tb = m_blocks.emplace_back();
+	if (index == SIZE_MAX || index >= m_blocks.size() - 1)
+	{
+		TextBlock& tb = m_blocks.emplace_back();
+		tb.type = type;
+		return;
+	}
+	TextBlock& tb = *m_blocks.emplace(m_blocks.begin() + index + 1);
 	tb.type = type;
 }
 
@@ -30,6 +39,24 @@ size_t Script::NumberOfBlocks() const
 	return m_blocks.size();
 }
 
+bool Script::MoveUp(size_t index)
+{
+	if (index == 0)
+		return false;
+
+	std::swap(m_blocks[index], m_blocks[index - 1]);
+	return true;
+}
+
+bool Script::MoveDown(size_t index)
+{
+	if (index >= m_blocks.size() - 1)
+		return false;
+
+	std::swap(m_blocks[index], m_blocks[index + 1]);
+	return true;
+}
+
 void Script::Load(const std::filesystem::path& path)
 {
 	if (!std::filesystem::exists(path))
@@ -38,8 +65,10 @@ void Script::Load(const std::filesystem::path& path)
 		return;
 	}
 
+	New();
+
 	CharacterManifest& characters = CharacterManifest::Get();
-	characters.clear();
+	m_filepath = path;
 
 	YAML::Node root = YAML::LoadFile(path.u8string());
 
@@ -65,9 +94,11 @@ void Script::Load(const std::filesystem::path& path)
 
 			if (charEntry["color"].IsDefined() && charEntry["color"].size() >= 3)
 			{
-				character.color.r = charEntry["color"][0].as<uint8_t>();
-				character.color.g = charEntry["color"][1].as<uint8_t>();
-				character.color.b = charEntry["color"][2].as<uint8_t>();
+				xe::Color8 color;
+				color.r = charEntry["color"][0].as<uint8_t>();
+				color.g = charEntry["color"][1].as<uint8_t>();
+				color.b = charEntry["color"][2].as<uint8_t>();
+				character.color = color;
 			}
 
 			if (charEntry["notes"].IsDefined())
@@ -141,8 +172,16 @@ void Script::Load(const std::filesystem::path& path)
 	}
 }
 
-void Script::Export(const std::filesystem::path& path)
+void Script::Export()
 {
+	xe::FileBrowser browser;
+	browser.PushFileType(L"*.docx", L"Word Document");
+	std::wstring pathStr = browser.SaveFile();
+	if (pathStr.empty())
+		return;
+
+	std::filesystem::path path = pathStr;
+
 	docx::Document doc;
 
 	std::string lastCharacter = "";
@@ -240,4 +279,95 @@ void Script::Export(const std::filesystem::path& path)
 		docx::Inch2Twip(1.));
 
 	doc.Save(path.u8string());
+}
+
+void Script::Save(bool doForceDialogue)
+{
+	if (m_filepath.empty() || doForceDialogue)
+	{
+		std::wstring path = SaveDialogue();
+		if (path.empty())
+			return;
+
+		m_filepath = path;
+	}
+
+	YAML::Node root;
+	root["name"] = m_name;
+	CharacterManifest& manifest = CharacterManifest::Get();
+	for (size_t i = 0; i < manifest.size(); ++i)
+	{
+		const Character& character = manifest[i];
+		YAML::Node charEntry;
+		charEntry["name"] = character.name;
+		charEntry["color"].push_back((int)character.color.As8bit().r);
+		charEntry["color"].push_back((int)character.color.As8bit().g);
+		charEntry["color"].push_back((int)character.color.As8bit().b);
+		if (!character.notes.empty())
+			charEntry["notes"] = character.notes;
+		
+		root["characters"].push_back(charEntry);
+	}
+
+	for (const TextBlock& block : m_blocks)
+	{
+		YAML::Node blockEntry;
+		switch (block.type)
+		{
+		case TextBlock::Slug:
+			blockEntry["type"] = "Slug";
+			break;
+		case TextBlock::Action:
+			blockEntry["type"] = "Action";
+			break;
+		case TextBlock::Parenthetical:
+			blockEntry["type"] = "Parenthetical";
+			blockEntry["character"] = block.character;
+			break;
+		case TextBlock::Dialogue:
+			blockEntry["type"] = "Dialogue";
+			blockEntry["character"] = block.character;
+			break;
+		}
+
+		blockEntry["text"] = block.content;
+
+		root["contents"].push_back(blockEntry);
+	}
+
+	std::filesystem::path path = m_filepath;
+
+	if (!std::filesystem::exists(path.parent_path()))
+		std::filesystem::create_directories(path.parent_path());
+
+	std::ofstream file(m_filepath);
+
+	file << root;
+}
+
+void Script::New()
+{
+	CharacterManifest& characters = CharacterManifest::Get();
+	characters.clear();
+	m_blocks.clear();
+	m_name = "Untitled";
+	m_filepath = L"";
+}
+
+void Script::OpenDialogue()
+{
+	xe::FileBrowser browser;
+	browser.PushFileType(L"*.yaml", L"YAML File");
+	std::wstring path = browser.GetFile();
+	if (path.empty())
+		return;
+
+	Load(path);
+}
+
+std::wstring Script::SaveDialogue()
+{
+	xe::FileBrowser browser;
+	browser.PushFileType(L"*.yaml", L"YAML File");
+	return browser.SaveFile();
 }

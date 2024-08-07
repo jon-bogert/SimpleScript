@@ -1,1 +1,0 @@
-Project is currently only set up for Microsoft Visual Studio v143 (2022). In order for exporting to work properly, install the "Courier Prime" font (https://fonts.google.com/specimen/Courier+Prime)

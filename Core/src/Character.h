@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
+#include "Structs.h"
 
 #include <memory>
 #include <string>
@@ -11,7 +11,7 @@ struct Character
 {
 	std::string name;
 	std::string notes;
-	sf::Color color = sf::Color::Red;
+	xe::Color color = xe::Color::Red;
 };
 
 class CharacterManifest

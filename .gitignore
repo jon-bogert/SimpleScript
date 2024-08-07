@@ -22,27 +22,7 @@ Makefile
 !premake5.exe
 
 # Required Library Exceptions
-!flac.lib
-!freetype.lib
-!imgui-sfml-s-d.lib
-!imgui-sfml-s.lib
-!ogg.lib
-!openal32.lib
-!sfml-audio-s-d.lib
-!sfml-audio-s.lib
-!sfml-graphics-s-d.lib
-!sfml-graphics-s.lib
-!sfml-network-s-d.lib
-!sfml-network-s.lib
-!sfml-system-s-d.lib
-!sfml-system-s.lib
-!sfml-window-s-d.lib
-!sfml-window-s.lib
-!vorbis.lib
-!vorbisenc.lib
-!vorbisfile.lib
-!openal32.dll
-!minidocx-d.lib
-!minidocx.lib
-!yaml-cpp-d.lib
-!yaml-cpp.lib
+!*/imgui.lib
+!*/imgui-d.lib
+!*/yaml-cpp.lib
+!*/yaml-cpp-d.lib

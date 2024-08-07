@@ -8,8 +8,8 @@ struct TextBlock
 		Unassigned = -1,
 		Slug = 0,
 		Action,
-		Dialogue,
-		Parenthetical
+		Parenthetical,
+		Dialogue
 	};
 
 	Type type = Type::Unassigned;

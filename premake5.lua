@@ -5,14 +5,15 @@ architecture "x64"
 
 project "Core"
     location "%{prj.name}"
-    kind "ConsoleApp"
-    language "C++"
+    kind "WindowedApp"
     language "C++"
     targetname "%{prj.name}"
     targetdir ("bin/".. outputdir)
     objdir ("%{prj.name}/int/" .. outputdir)
     cppdialect "C++17"
     staticruntime "Off"
+
+    defines { "YAML_CPP_STATIC_DEFINE" }
 
     files
     {
@@ -24,38 +25,21 @@ project "Core"
 
     includedirs
     {
-        "%{prj.name}/include/ImGui",
-        "%{prj.name}/include/minidocx",
         "%{prj.name}/include",
-        "%{prj.name}/src"
-    }
-
-    defines
-    {
-        "SFML_STATIC",
-        "YAML_CPP_STATIC_DEFINE"
-    }
-
-    libdirs
-    {
-        "%{prj.name}/include/ImGui",
+        "%{prj.name}/include/imgui",
         "%{prj.name}/include/minidocx",
-        "%{prj.name}/lib"
+        "%{prj.name}/src",
     }
+
+    libdirs "%{prj.name}/lib"
 
     links
     {
-	    "shell32",
-        "opengl32",
-        "winmm",
-        "gdi32",
-        "flac",
-        "freetype",
-        "ogg",
-        "openal32",
-        "vorbis",
-        "vorbisenc",
-        "vorbisfile"
+        "imgui",
+        "d3d11",
+        "d3dcompiler",
+        "dxgi",
+        "shell32",
     }
 
     filter "system:windows"
@@ -67,13 +51,9 @@ project "Core"
 		symbols "On"
         links
         {
-            "sfml-audio-s-d",
-            "sfml-graphics-s-d",
-            "sfml-network-s-d",
-            "sfml-system-s-d",
-            "sfml-window-s-d",
-            "imgui-sfml-s-d",
+            "imgui-d",
             "minidocx-d",
+			"XephInput-d",
             "yaml-cpp-d"
         }
 
@@ -82,13 +62,8 @@ project "Core"
 		optimize "On"
         links
         {
-            "sfml-audio-s",
-            "sfml-graphics-s",
-            "sfml-network-s",
-            "sfml-system-s",
-            "sfml-window-s",
-            "imgui-sfml-s",
+            "imgui",
             "minidocx",
+			"XephInput",
             "yaml-cpp"
         }
-

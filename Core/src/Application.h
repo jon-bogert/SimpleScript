@@ -1,42 +1,55 @@
 #pragma once
-#include "WindowManager.h"
 
-#include "Project.h"
-#include "Editor/Editor.h"
+#include "Script.h"
 
-#include <memory>
+#include "WindowTypes/CharactersWindow.h"
+#include "WindowTypes/ContentWindow.h"
+#include "WindowTypes/InspectorWindow.h"
+#include "WindowTypes/ToolbarWindow.h"
+
+#include <windows.h>
+#include <cstdint>
+
+enum class UIStyle { Dark, Light, Custom};
 
 class Application final
 {
-    Application() {}
+	Application() {}
 
 public:
-    static Application& Get() { static Application instance; return instance; }
+	static Application& Get() { static Application instance; return instance; }
+	~Application() = default;
+	Application(const Application& other) = delete;
+	Application(const Application&& other) = delete;
+	Application operator=(const Application& other) = delete;
+	Application operator=(const Application&& other) = delete;
+	const wchar_t* name = L"SimpleScript";
+	uint32_t windowWidth = 1280;
+	uint32_t windowHeight = 720;
+	uint32_t windowPosX = 100;
+	uint32_t windowPosY = 100;
+	UIStyle style = UIStyle::Custom;
+	bool useFloatingWindows = true;
 
-    ~Application() = default;
-    Application(const Application& other) = delete;
-    Application(const Application&& other) = delete;
-    Application operator=(const Application& other) = delete;
-    Application operator=(const Application&& other) = delete;
+	void Start();
+	void PreUpdate();
+	void OnGUI();
+	void PostUpdate();
+	void Destroy();
+	void SetWindowHandle(HWND hwnd);
+	bool LoadSettings();
+	void SaveSettings();
 
-    void Start();
-    void Update();
-    void Shutdown();
+	ContentWindow* contentWindow = nullptr;
+	CharactersWindow* charactersWindow = nullptr;
+	ToolbarWindow* toolbarWindow = nullptr;
+	InspectorWindow* inspectorWindow = nullptr;
 
-    float GetScroll() const { return m_scroll; }
-    void UpdateScroll(float amt);
-
-    Project* GetActiveProject();
-    const Project* GetActiveProject() const;
-
-    Editor* GetEditor() { return m_editor.get(); }
+	Script script;
+	size_t editIndex = SIZE_MAX;
 
 private:
-    WindowManager m_windowManager;
-    std::unique_ptr<Project> m_activeProject = nullptr;
-    std::unique_ptr<Editor> m_editor = nullptr;
-
-    float m_scroll = 0.f;
+	HWND m_hwnd;
 
 };
 

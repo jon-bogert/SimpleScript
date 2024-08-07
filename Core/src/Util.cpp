@@ -1,9 +1,11 @@
+#include "Structs.h"
 #include "Util.h"
 
 #include <sstream>
 
 #define DIALOGUE_LIMIT 36
 #define ACTION_LIMIT 57
+#define COLOR_CLIP 0.1f
 
 namespace Utility
 {
@@ -102,5 +104,30 @@ namespace Utility
 		result.append(numstr);
 
 		return result;
+	}
+
+	xe::Color ClipColor(const xe::Color& color)
+	{
+		xe::Color result = color;
+		float highest = std::max(result.r, std::max(result.g, result.b));
+		float factor = (COLOR_CLIP / highest);
+		result.r *= factor;
+		result.g *= factor;
+		result.b *= factor;
+		return result;
+	}
+	xe::Color RandomColor()
+	{
+		xe::Color8 color;
+		bool isLightEnough = false;
+		while (!isLightEnough)
+		{
+			color.r = xe::Math::Random::Range(0, 256);
+			color.g = xe::Math::Random::Range(0, 256);
+			color.b = xe::Math::Random::Range(0, 256);
+			uint8_t lightest = std::max(color.r, std::max(color.g, color.b));
+			isLightEnough = (lightest >= 200);
+		}
+		return color;
 	}
 }
