@@ -17,6 +17,12 @@ void ContentWindow::OnGUI()
 	Application& app = Application::Get();
 	Script& script = app.script;
 
+	if (script.NumberOfBlocks() == 0)
+	{
+		ImGui::Text("No content yet...");
+		return;
+	}
+
 	float width = ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x * 4.f;
 	bool isHeaderOpen = false;
 	uint32_t slugCount = 0;
