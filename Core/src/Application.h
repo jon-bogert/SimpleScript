@@ -8,6 +8,7 @@
 #include "WindowTypes/ToolbarWindow.h"
 
 #include <windows.h>
+#include <filesystem>
 #include <cstdint>
 
 enum class UIStyle { Dark, Light, Custom};
@@ -47,6 +48,12 @@ public:
 
 	Script script;
 	size_t editIndex = SIZE_MAX;
+
+	std::vector<std::filesystem::path> recentFiles;
+	const int RECENT_MAX = 10;
+	std::filesystem::path lastOpen;
+	std::filesystem::path lastSave;
+	std::filesystem::path lastExport;
 
 private:
 	HWND m_hwnd;

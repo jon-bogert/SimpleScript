@@ -4,7 +4,6 @@
 #include "Debug.h"
 #include "WindowManager.h"
 
-#include <filesystem>
 #include <fstream>
 
 #include <imgui.h>
@@ -40,6 +39,24 @@ void Application::OnGUI()
 			if (ImGui::MenuItem("Open##File"))
 			{
 				script.OpenDialogue();
+			}
+			if (ImGui::BeginMenu("Open Recent##File"))
+			{
+				if (recentFiles.empty())
+				{
+					ImGui::TextDisabled("No recent projects");
+				}
+				else
+				{
+					for (const std::filesystem::path& file : recentFiles)
+					{
+						if (ImGui::MenuItem(file.filename().u8string().c_str()))
+						{
+							script.Load(file);
+						}
+					}
+				}
+				ImGui::EndMenu();
 			}
 			ImGui::Separator();
 			if (ImGui::MenuItem("Save##File"))
@@ -134,6 +151,27 @@ bool Application::LoadSettings()
 		windowPosY = root["position"][1].as<uint32_t>();
 	}
 
+	if (root["recent"].IsDefined())
+	{
+		for (const YAML::Node& recent : root["recent"])
+		{
+			recentFiles.push_back(recent.as<std::string>());
+		}
+	}
+
+	if (root["last-open"].IsDefined())
+	{
+		lastOpen = root["last-open"].as<std::string>();
+	}
+	if (root["last-save"].IsDefined())
+	{
+		lastSave = root["last-save"].as<std::string>();
+	}
+	if (root["last-export"].IsDefined())
+	{
+		lastExport = root["last-export"].as<std::string>();
+	}
+
 	return true;
 }
 
@@ -152,6 +190,18 @@ void Application::SaveSettings()
 
 	root["position"].push_back(windowPosX);
 	root["position"].push_back(windowPosY);
+
+	if (!recentFiles.empty())
+	{
+		for (const std::filesystem::path& path : recentFiles)
+		{
+			root["recent"].push_back(path.u8string());
+		}
+	}
+
+	root["last-open"] = lastOpen.u8string();
+	root["last-save"] = lastSave.u8string();
+	root["last-export"] = lastExport.u8string();
 
 	settingsPath /= L"window.yaml";
 

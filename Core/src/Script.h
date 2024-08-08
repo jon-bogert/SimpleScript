@@ -21,7 +21,7 @@ public:
 	bool MoveUp(size_t index);
 	bool MoveDown(size_t index);
 
-	void Load(const std::filesystem::path& path);
+	void Load(const std::filesystem::path path); // copy on purpose (possible move of stored path)
 	void Export();
 	void Save(bool doForceDialogue = false);
 	void New();

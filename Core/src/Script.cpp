@@ -57,12 +57,28 @@ bool Script::MoveDown(size_t index)
 	return true;
 }
 
-void Script::Load(const std::filesystem::path& path)
+void Script::Load(const std::filesystem::path path)
 {
 	if (!std::filesystem::exists(path))
 	{
 		LOG("Scene could not find file: %s", path.c_str());
 		return;
+	}
+
+	Application& app = Application::Get();
+	auto found = std::find(app.recentFiles.begin(), app.recentFiles.end(), path);
+	if (found != app.recentFiles.end())
+	{
+		app.recentFiles.erase(found);
+		app.recentFiles.insert(app.recentFiles.begin(), path);
+	}
+	else
+	{
+		if (app.recentFiles.size() >= app.RECENT_MAX)
+		{
+			app.recentFiles.pop_back();
+		}
+		app.recentFiles.insert(app.recentFiles.begin(), path);
 	}
 
 	New();
@@ -176,11 +192,13 @@ void Script::Export()
 {
 	xe::FileBrowser browser;
 	browser.PushFileType(L"*.docx", L"Word Document");
+	browser.SetStartPath(Application::Get().lastExport);
 	std::wstring pathStr = browser.SaveFile();
 	if (pathStr.empty())
 		return;
 
 	std::filesystem::path path = pathStr;
+	Application::Get().lastExport = path.parent_path();
 
 	docx::Document doc;
 
@@ -290,6 +308,12 @@ void Script::Save(bool doForceDialogue)
 			return;
 
 		m_filepath = path;
+		Application& app = Application::Get();
+		if (app.recentFiles.size() >= app.RECENT_MAX)
+		{
+			app.recentFiles.pop_back();
+			app.recentFiles.insert(app.recentFiles.begin(), path);
+		}
 	}
 
 	YAML::Node root;
@@ -358,10 +382,12 @@ void Script::OpenDialogue()
 {
 	xe::FileBrowser browser;
 	browser.PushFileType(L"*.yaml", L"YAML File");
+	browser.SetStartPath(Application::Get().lastOpen);
 	std::wstring path = browser.GetFile();
 	if (path.empty())
 		return;
 
+	Application::Get().lastOpen = std::filesystem::path(path).parent_path();
 	Load(path);
 }
 
@@ -369,5 +395,11 @@ std::wstring Script::SaveDialogue()
 {
 	xe::FileBrowser browser;
 	browser.PushFileType(L"*.yaml", L"YAML File");
-	return browser.SaveFile();
+	browser.SetStartPath(Application::Get().lastSave);
+	std::filesystem::path path = browser.SaveFile();
+	if (!path.empty())
+	{
+		Application::Get().lastSave = std::filesystem::path(path).parent_path();
+	}
+	return path;
 }
