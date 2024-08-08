@@ -1,4 +1,9 @@
-[Window][Debug##Default]
+#pragma once
+
+#include <string>
+
+inline std::string customINI =
+R"([Window][Debug##Default]
 ViewportPos=410,453
 ViewportId=0x9F5F46A1
 Size=32,27840
@@ -68,3 +73,4 @@ DockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=270,209 Size=1659,1072 Split
     DockNode    ID=0x00000001 Parent=0x00000005 SizeRef=328,720 Selected=0xE7039252
   DockNode      ID=0x00000006 Parent=0x8B93E3BD SizeRef=1902,199 Selected=0x392A5ADD
 
+)";

@@ -73,10 +73,10 @@ void Application::OnGUI()
 			}
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit##MM"))
-		{
-			ImGui::EndMenu();
-		}
+		//if (ImGui::BeginMenu("Edit##MM"))
+		//{
+		//	ImGui::EndMenu();
+		//}
 		if (ImGui::BeginMenu("Windows##MM"))
 		{
 			if (ImGui::MenuItem("Characters##Window"))

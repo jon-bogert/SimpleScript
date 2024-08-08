@@ -16,11 +16,15 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <filesystem>
+#include <fstream>
 
 #include <XephInput/InputSystem.h>
 
+#include "AppData.h"
 #include "Application.h"
 #include "Debug.h"
+#include "DefaultINI.h"
 #include "Style.h"
 #include "WindowManager.h"
 
@@ -46,6 +50,14 @@ Application& app = Application::Get();
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {
     app.LoadSettings();
+    std::filesystem::path iniPath = _APPDATA_ + L"\\SimpleScript\\imgui.ini";
+    if (!std::filesystem::exists(iniPath))
+    {
+        std::filesystem::create_directories(iniPath.parent_path());
+        std::ofstream file(iniPath);
+        file << customINI;
+        file.close();
+    }
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, app.name, nullptr };
@@ -71,6 +83,9 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    char iniFilename[MAX_PATH];
+    strcpy_s(iniFilename, iniPath.u8string().c_str());
+    io.IniFilename = iniFilename;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Not yet working
