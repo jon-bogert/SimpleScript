@@ -1,6 +1,7 @@
 #include "InspectorWindow.h"
 
 #include "../Application.h"
+#include "../CustomMultiline.h"
 
 #include <XephInput/InputSystem.h>
 
@@ -80,27 +81,17 @@ void InspectorWindow::OnGUI()
 			ImGui::End();
 		}
 
-		char buffer[1024];
 		ImGui::NewLine();
 		ImGui::Text("Content:");
-		memcpy_s(buffer, 1024, block.content.c_str(), block.content.length() + 1);
 		std::string tag = "##cont_" + std::to_string(app.editIndex);
-		if (ImGui::InputTextMultiline(tag.c_str(), buffer, 1024, ImVec2(-1, -1)))
-		{
-			block.content = buffer;
-		}
+		CustomMultiline(tag, block.content);
 	}
 	else if (block.type == TextBlock::Action)
 	{
-		char buffer[1024];
 		ImGui::NewLine();
 		ImGui::Text("Content:");
-		memcpy_s(buffer, 1024, block.content.c_str(), block.content.length() + 1);
 		std::string tag = "##cont_" + std::to_string(app.editIndex);
-		if (ImGui::InputTextMultiline(tag.c_str(), buffer, 1024, ImVec2(-1, -1)))
-		{
-			block.content = buffer;
-		}
+		CustomMultiline(tag, block.content);
 	}
 	else if (block.type == TextBlock::Slug)
 	{

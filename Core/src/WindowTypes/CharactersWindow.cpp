@@ -2,6 +2,7 @@
 
 #include "../Application.h"
 #include "../Character.h"
+#include "../CustomMultiline.h"
 #include "../Util.h"
 
 #include <regex>
@@ -170,12 +171,7 @@ void CharactersWindow::Info()
 
 	ImGui::NewLine();
 	ImGui::Text("Notes:");
-	char buffer[1024];
-	memcpy_s(buffer, 1024, character.notes.c_str(), character.notes.length() + 1);
-	if (ImGui::InputTextMultiline(("##notes_" + character.name).c_str(), buffer, 1024, ImVec2(-1, -1)))
-	{
-		character.notes = buffer;
-	}
+	CustomMultiline("##notes_" + character.name, character.notes);
 
 	manifest.update(m_selected, character);
 

@@ -23,7 +23,6 @@ void ContentWindow::OnGUI()
 		return;
 	}
 
-	float width = ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x * 4.f;
 	bool isHeaderOpen = false;
 	uint32_t slugCount = 0;
 	std::string lastCharacter = "";
@@ -98,7 +97,7 @@ void ContentWindow::OnGUI()
 			if (block.type == TextBlock::Parenthetical)
 				content.push_back(')');
 
-			ImGui::Text(impl::NewlineFormat(content, width).c_str());
+			ImGui::TextWrapped(content.c_str());
 			if (i == app.editIndex)
 			{
 				ImGui::EndTable();
@@ -121,7 +120,7 @@ void ContentWindow::OnGUI()
 		float colVal = (i == app.editIndex) ? 0.2f : 0.1f;
 		ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImColor(ImVec4(colVal, colVal, colVal, 1.f)));
 		std::string content = (block.content.empty()) ? " <empty> " : block.content;
-		ImGui::TextColored(ImVec4(0.6, 0.6, 0.6, 1.f), impl::NewlineFormat(content.c_str(), ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x * 4.f).c_str());
+		ImGui::TextColored(ImVec4(0.6, 0.6, 0.6, 1.f), impl::NewlineFormat(content, ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x * 4.f).c_str());
 
 		if (ImGui::IsItemClicked())
 		{
