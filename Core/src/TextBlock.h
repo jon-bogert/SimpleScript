@@ -9,7 +9,8 @@ struct TextBlock
 		Slug = 0,
 		Action,
 		Parenthetical,
-		Dialogue
+		Dialogue,
+		Note
 	};
 
 	Type type = Type::Unassigned;

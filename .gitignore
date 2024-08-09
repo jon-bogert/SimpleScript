@@ -12,6 +12,9 @@ Makefile
 */int
 /bin
 
+#debug Dirs
+*/appdata
+
 # Binaries
 *.exe
 *.lib

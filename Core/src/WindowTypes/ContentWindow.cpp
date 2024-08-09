@@ -48,6 +48,36 @@ void ContentWindow::OnGUI()
 
 		if (!isHeaderOpen)
 			continue;
+		//
+		if (block.type == TextBlock::Note)
+		{
+			ImGui::NewLine();
+			if (i == app.editIndex)
+			{
+				ImGui::BeginTable("##char", 1);
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImColor(ImVec4(0.4, 0.4, 0.4, 1.f)));
+			}
+
+			std::string content = (block.content.empty()) ? "<empty>" : block.content;
+
+			ImGui::TextColored(ImVec4(.34f, 0.65, 0.29, 1.f), impl::NewlineFormat("// " + content, ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x * 4.f).c_str());
+
+			if (i == app.editIndex)
+			{
+				ImGui::EndTable();
+			}
+
+			if (ImGui::IsItemClicked())
+			{
+				app.editIndex = i;
+			}
+
+			wasLastDialogue = false;
+			continue;
+		}
 
 		if (block.type == TextBlock::Dialogue
 			|| block.type == TextBlock::Parenthetical)

@@ -30,6 +30,10 @@ void ToolbarWindow::OnGUI()
 		Add(TextBlock::Dialogue);
 		m_showCharacterAdd = true;
 	}
+	if (ImGui::Button("Note##add"))
+	{
+		Add(TextBlock::Note);
+	}
 
 	ImGui::NewLine();
 	ImGui::Text("Edit:");

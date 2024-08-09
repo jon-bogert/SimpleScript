@@ -9,7 +9,7 @@
 
 namespace
 {
-	const char* k_typeCombo = "Slug Line\0Action\0Parethetical\0Dialogue";
+	const char* k_typeCombo = "Slug Line\0Action\0Parethetical\0Dialogue\0Note";
 }
 
 void InspectorWindow::Start()
@@ -86,7 +86,8 @@ void InspectorWindow::OnGUI()
 		std::string tag = "##cont_" + std::to_string(app.editIndex);
 		CustomMultiline(tag, block.content);
 	}
-	else if (block.type == TextBlock::Action)
+	else if (block.type == TextBlock::Action
+		|| block.type == TextBlock::Note)
 	{
 		ImGui::NewLine();
 		ImGui::Text("Content:");

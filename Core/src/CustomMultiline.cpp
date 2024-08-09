@@ -35,7 +35,7 @@ std::string impl::NewlineFormat(const std::string& str, const float width)
 		line += " " + word;
 	}
 	result += line;
-	if (str.back() == ' ')
+	if ( !str.empty() && str.back() == ' ')
 		result.push_back(' ');
 
 	return result;

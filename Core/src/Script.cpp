@@ -151,6 +151,8 @@ void Script::Load(const std::filesystem::path path)
 			block.type = TextBlock::Type::Parenthetical;
 		else if (typeStr == "Dialogue")
 			block.type = TextBlock::Type::Dialogue;
+		else if (typeStr == "Note")
+			block.type = TextBlock::Type::Note;
 		else
 		{
 			LOG("On Parse, unknown block type: %s", typeStr.c_str());
@@ -210,6 +212,9 @@ void Script::Export()
 
 	for (const TextBlock& block : m_blocks)
 	{
+		if (block.type == TextBlock::Type::Note)
+			continue;
+
 		p = doc.AppendParagraph();
 		if (block.type == TextBlock::Type::Parenthetical ||
 			block.type == TextBlock::Type::Dialogue)
@@ -351,6 +356,9 @@ void Script::Save(bool doForceDialogue)
 		case TextBlock::Dialogue:
 			blockEntry["type"] = "Dialogue";
 			blockEntry["character"] = block.character;
+			break;
+		case TextBlock::Note:
+			blockEntry["type"] = "Note";
 			break;
 		}
 

@@ -48,9 +48,14 @@ namespace xe
 		}
 	}
 }
-
+#ifdef _DEBUG
+#define _APPDATA_ std::wstring(L"appdata")
+#define APPDATA_PATH std::wstring(L"appdata")
+#define _APPDATA_CSTR_ std::wstring(L"appdata").c_str()
+#else
 #define _APPDATA_ xe::AppDataDir()
 #define APPDATA_PATH xe::AppDataDir()
 #define _APPDATA_CSTR_ xe::AppDataDir().c_str()
+#endif
 
 #endif // XE_APPDATA_H
