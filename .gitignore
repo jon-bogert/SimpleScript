@@ -25,7 +25,11 @@ Makefile
 !premake5.exe
 
 # Required Library Exceptions
-!*/imgui.lib
-!*/imgui-d.lib
-!*/yaml-cpp.lib
-!*/yaml-cpp-d.lib
+!*imgui.lib
+!*imgui-d.lib
+!*yaml-cpp.lib
+!*yaml-cpp-d.lib
+!*XephInput.lib
+!*XephInput-d.lib
+!*minidocx.lib
+!*minidocx-d.lib
