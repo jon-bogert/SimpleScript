@@ -1,4 +1,4 @@
-Basic screenplay script writing software. Currently only for Windows x64. provided static libraries built for MSVC v143 (Visual Studio 2022).
+Basic screenplay script writing software. Currently only for Windows x64. Provided static libraries built for MSVC v143 (Visual Studio 2022).
 
 GETTING STARTED:
 Premake build system provided. Run "generate-vs2022.bat" 
