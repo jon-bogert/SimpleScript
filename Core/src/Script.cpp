@@ -319,6 +319,21 @@ void Script::Save(bool doForceDialogue)
 			app.recentFiles.pop_back();
 			app.recentFiles.insert(app.recentFiles.begin(), path);
 		}
+
+		auto found = std::find(app.recentFiles.begin(), app.recentFiles.end(), path);
+		if (found != app.recentFiles.end())
+		{
+			app.recentFiles.erase(found);
+			app.recentFiles.insert(app.recentFiles.begin(), path);
+		}
+		else
+		{
+			if (app.recentFiles.size() >= app.RECENT_MAX)
+			{
+				app.recentFiles.pop_back();
+			}
+			app.recentFiles.insert(app.recentFiles.begin(), path);
+		}
 	}
 
 	YAML::Node root;

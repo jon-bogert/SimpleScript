@@ -119,7 +119,7 @@ bool Application::LoadSettings()
 {
 	std::filesystem::path settingsPath = _APPDATA_;
 	settingsPath /= L"SimpleScript";
-	settingsPath /= L"window.yaml";
+	settingsPath /= L"settings.yaml";
 
 	if (!std::filesystem::exists(settingsPath))
 	{
@@ -155,7 +155,11 @@ bool Application::LoadSettings()
 	{
 		for (const YAML::Node& recent : root["recent"])
 		{
-			recentFiles.push_back(recent.as<std::string>());
+			std::filesystem::path path(recent.as<std::string>());
+			if (!std::filesystem::exists(path))
+				continue;
+
+			recentFiles.push_back(path);
 		}
 	}
 
@@ -203,7 +207,7 @@ void Application::SaveSettings()
 	root["last-save"] = lastSave.u8string();
 	root["last-export"] = lastExport.u8string();
 
-	settingsPath /= L"window.yaml";
+	settingsPath /= L"settings.yaml";
 
 	std::ofstream file(settingsPath);
 	if (!file.is_open())
