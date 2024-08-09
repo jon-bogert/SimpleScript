@@ -8,6 +8,7 @@
 
 #include <imgui.h>
 #include <yaml-cpp/yaml.h>
+#include <XephInput/InputSystem.h>
 
 void Application::Start()
 {
@@ -23,6 +24,35 @@ void Application::Start()
 
 void Application::PreUpdate()
 {
+	if (xe::InputSystem::GetKeyHold(xe::Key::Ctrl))
+	{
+		if (xe::InputSystem::GetKeyHold(xe::Key::Shift))
+		{
+			if (xe::InputSystem::GetKeyDown(xe::Key::S))
+			{
+				script.Save(true);
+			}
+		}
+		else
+		{
+			if (xe::InputSystem::GetKeyDown(xe::Key::N))
+			{
+				script.New();
+			}
+			if (xe::InputSystem::GetKeyDown(xe::Key::O))
+			{
+				script.OpenDialogue();
+			}
+			if (xe::InputSystem::GetKeyDown(xe::Key::S))
+			{
+				script.Save();
+			}
+			if (xe::InputSystem::GetKeyDown(xe::Key::E))
+			{
+				script.Export();
+			}
+		}
+	}
 }
 
 void Application::OnGUI()
@@ -31,12 +61,12 @@ void Application::OnGUI()
 	{
 		if (ImGui::BeginMenu("File##MM"))
 		{
-			if (ImGui::MenuItem("New##File"))
+			if (ImGui::MenuItem("New##File", "Ctrl+N"))
 			{
 				script.New();
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem("Open##File"))
+			if (ImGui::MenuItem("Open##File", "Ctrl+O"))
 			{
 				script.OpenDialogue();
 			}
@@ -59,15 +89,15 @@ void Application::OnGUI()
 				ImGui::EndMenu();
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem("Save##File"))
+			if (ImGui::MenuItem("Save##File", "Ctrl+S"))
 			{
 				script.Save();
 			}
-			if (ImGui::MenuItem("Save As##File"))
+			if (ImGui::MenuItem("Save As##File", "Ctrl+Shift+S"))
 			{
 				script.Save(true);
 			}
-			if (ImGui::MenuItem("Export##File"))
+			if (ImGui::MenuItem("Export##File", "Ctrl+E"))
 			{
 				script.Export();
 			}

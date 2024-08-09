@@ -401,6 +401,7 @@ void Script::New()
 	m_blocks.clear();
 	m_name = "Untitled";
 	m_filepath = L"";
+	Application::Get().editIndex = SIZE_MAX;
 }
 
 void Script::OpenDialogue()

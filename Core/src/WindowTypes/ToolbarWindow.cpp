@@ -57,6 +57,7 @@ void ToolbarWindow::OnGUI()
 	if (ImGui::Button("Remove##edit"))
 	{
 		Remove();
+		app.editIndex = SIZE_MAX;
 		app.isSaved = false;
 	}
 
