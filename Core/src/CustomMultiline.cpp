@@ -4,10 +4,15 @@ namespace
 {
 	int InputCallback(ImGuiInputTextCallbackData* data)
 	{
-		std::string formatted = impl::NewlineFormat(data->Buf, *(float*)data->UserData);
+		std::string formatted = data->Buf;
+		impl::InlineFormat(formatted); // reset to to remove old newlines
+		formatted = impl::NewlineFormat(formatted, *(float*)data->UserData);
+
 		memcpy_s(data->Buf, 1024, formatted.c_str(), formatted.length() + 1);
+
 		data->BufTextLen = formatted.length();
 		data->BufDirty = true;
+
 		return 0;
 	}
 }
