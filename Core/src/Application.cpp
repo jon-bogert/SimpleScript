@@ -127,6 +127,11 @@ void Application::OnGUI()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Help##MM"))
+		{
+			ImGui::TextDisabled("Version: beta-%i.%i.%i", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+			ImGui::EndMenu();
+		}
 	}
 	ImGui::EndMainMenuBar();
 	ImGui::DockSpaceOverViewport();
