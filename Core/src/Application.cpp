@@ -214,3 +214,48 @@ void Application::SaveSettings()
 
 	file << root;
 }
+
+void Application::SaveWindow()
+{
+	xe::Vector2 pos = { (float)windowWidth, (float)windowHeight };
+	pos *= 0.5;
+	pos.x += windowPosX;
+	pos.y += windowPosY;
+	ImGui::SetNextWindowPos(pos, 0, {0.5f, 0.5f});
+	ImGui::Begin("Save Before Close", nullptr,
+		ImGuiWindowFlags_AlwaysAutoResize |
+		ImGuiWindowFlags_NoDecoration |
+		ImGuiWindowFlags_NoMove);
+	ImGui::TextColored(xe::Color::Yellow, "Warning");
+	ImGui::NewLine();
+	ImGui::Text("You have unsaved changes.\nWould you like to save before closing?");
+	ImGui::NewLine();
+
+	if (ImGui::Button("Save##savewin"))
+	{
+		script.Save();
+		isRunning = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(" Don't Save##savewin"))
+	{
+		isRunning = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Cancel##savewin"))
+	{
+		showSaveWindow = false;
+	}
+
+	ImGui::End();
+}
+
+void Application::TryQuit()
+{
+	if (!isSaved)
+	{
+		showSaveWindow = true;
+		return;
+	}
+	isRunning = false;
+}

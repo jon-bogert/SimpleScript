@@ -1,5 +1,7 @@
 #include "WindowManager.h"
 
+#include "Application.h"
+
 #include <imgui.h>
 
 WindowManager& WindowManager::Get()
@@ -17,7 +19,7 @@ void WindowManager::PreUpdate()
 }
 void WindowManager::OnGUI()
 {
-	
+	Application& app = Application::Get();
 	for (std::unique_ptr<Window>& w : Get().m_windows)
 	{
 		if (!w->isOpen)
@@ -27,6 +29,10 @@ void WindowManager::OnGUI()
 		ImGui::Begin(w->name.c_str(), &w->isOpen, w->windowFlags);
 		w->OnGUI();
 		ImGui::End();
+	}
+	if (app.showSaveWindow)
+	{
+		app.SaveWindow();
 	}
 }
 void WindowManager::PostUpdate()

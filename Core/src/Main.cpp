@@ -134,8 +134,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
     //extra window start functions called when added to the WindowManager
 
     // Main loop
-    bool done = false;
-    while (!done)
+    while (app.isRunning)
     {
         xe::InputSystem::Update();
         app.PreUpdate();
@@ -146,12 +145,17 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
         while (::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
         {
             ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
             if (msg.message == WM_QUIT)
-                done = true;
+            {
+                app.TryQuit();
+                if (!app.isRunning)
+                    ::DispatchMessage(&msg);
+            }
+            else
+            {
+                ::DispatchMessage(&msg);
+            }
         }
-        if (done)
-            break;
 
         // Handle window resize (we don't resize directly in the WM_SIZE handler)
         if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
@@ -311,7 +315,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
             return 0;
         break;
-    case WM_DESTROY:
+    case WM_CLOSE:
         ::PostQuitMessage(0);
         return 0;
     case WM_MOVE:

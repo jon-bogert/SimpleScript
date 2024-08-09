@@ -12,6 +12,18 @@ void ContentWindow::Start()
 	name = "Content";
 }
 
+void ContentWindow::Specs()
+{
+	if (!Application::Get().isSaved)
+	{
+		windowFlags |= ImGuiWindowFlags_UnsavedDocument;
+	}
+	else
+	{
+		windowFlags &= ~ImGuiWindowFlags_UnsavedDocument;
+	}
+}
+
 void ContentWindow::OnGUI()
 {
 	Application& app = Application::Get();

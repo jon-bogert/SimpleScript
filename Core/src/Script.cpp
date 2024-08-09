@@ -306,6 +306,7 @@ void Script::Export()
 
 void Script::Save(bool doForceDialogue)
 {
+	Application& app = Application::Get();
 	if (m_filepath.empty() || doForceDialogue)
 	{
 		std::wstring path = SaveDialogue();
@@ -313,7 +314,6 @@ void Script::Save(bool doForceDialogue)
 			return;
 
 		m_filepath = path;
-		Application& app = Application::Get();
 		if (app.recentFiles.size() >= app.RECENT_MAX)
 		{
 			app.recentFiles.pop_back();
@@ -375,6 +375,8 @@ void Script::Save(bool doForceDialogue)
 	std::ofstream file(m_filepath);
 
 	file << root;
+
+	app.isSaved = true;
 }
 
 void Script::New()

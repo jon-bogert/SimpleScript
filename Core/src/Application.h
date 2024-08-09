@@ -41,6 +41,13 @@ public:
 	bool LoadSettings();
 	void SaveSettings();
 
+	void SaveWindow();
+	void TryQuit();
+
+	bool isRunning = true;
+	bool isSaved = true;
+	bool showSaveWindow = false;
+
 	ContentWindow* contentWindow = nullptr;
 	CharactersWindow* charactersWindow = nullptr;
 	ToolbarWindow* toolbarWindow = nullptr;

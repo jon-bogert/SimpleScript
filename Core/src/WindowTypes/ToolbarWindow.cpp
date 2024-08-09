@@ -11,28 +11,34 @@ void ToolbarWindow::Start()
 
 void ToolbarWindow::OnGUI()
 {
+	Application& app = Application::Get();
 	ImGui::Text("Add:");
 	if (ImGui::Button("Slug Line##add"))
 	{
 		Add(TextBlock::Slug);
+		app.isSaved = false;
 	}
 	if (ImGui::Button("Action##add"))
 	{
 		Add(TextBlock::Action);
+		app.isSaved = false;
 	}
 	if (ImGui::Button("Parenthetical##add"))
 	{
 		Add(TextBlock::Parenthetical);
 		m_showCharacterAdd = true;
+		app.isSaved = false;
 	}
 	if (ImGui::Button("Dialogue##add"))
 	{
 		Add(TextBlock::Dialogue);
 		m_showCharacterAdd = true;
+		app.isSaved = false;
 	}
 	if (ImGui::Button("Note##add"))
 	{
 		Add(TextBlock::Note);
+		app.isSaved = false;
 	}
 
 	ImGui::NewLine();
@@ -41,14 +47,17 @@ void ToolbarWindow::OnGUI()
 	if (ImGui::Button("Move Up##edit"))
 	{
 		MoveUp();
+		app.isSaved = false;
 	}
 	if (ImGui::Button("Move Down##edit"))
 	{
 		MoveDown();
+		app.isSaved = false;
 	}
 	if (ImGui::Button("Remove##edit"))
 	{
 		Remove();
+		app.isSaved = false;
 	}
 
 	if (m_showCharacterAdd)

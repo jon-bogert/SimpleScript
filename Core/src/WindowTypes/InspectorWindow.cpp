@@ -38,6 +38,7 @@ void InspectorWindow::OnGUI()
 	if (ImGui::Combo("##Typeinsp", &typeInt, k_typeCombo))
 	{
 		block.type = (TextBlock::Type)typeInt;
+		app.isSaved = false;
 	}
 
 	if (block.type == TextBlock::Dialogue
@@ -74,6 +75,7 @@ void InspectorWindow::OnGUI()
 				{
 					block.character = characters[i].name;
 					m_editCharacter = false;
+					app.isSaved = false;
 					break;
 				}
 			}
@@ -84,7 +86,10 @@ void InspectorWindow::OnGUI()
 		ImGui::NewLine();
 		ImGui::Text("Content:");
 		std::string tag = "##cont_" + std::to_string(app.editIndex);
-		CustomMultiline(tag, block.content);
+		if (CustomMultiline(tag, block.content))
+		{
+			app.isSaved = false;
+		}
 	}
 	else if (block.type == TextBlock::Action
 		|| block.type == TextBlock::Note)
@@ -92,7 +97,10 @@ void InspectorWindow::OnGUI()
 		ImGui::NewLine();
 		ImGui::Text("Content:");
 		std::string tag = "##cont_" + std::to_string(app.editIndex);
-		CustomMultiline(tag, block.content);
+		if (CustomMultiline(tag, block.content))
+		{
+			app.isSaved = false;
+		}
 	}
 	else if (block.type == TextBlock::Slug)
 	{
@@ -104,6 +112,7 @@ void InspectorWindow::OnGUI()
 		if (ImGui::InputText(tag.c_str(), buffer, 1024, ImGuiInputTextFlags_CharsUppercase))
 		{
 			block.content = buffer;
+			app.isSaved = false;
 		}
 	}
 }

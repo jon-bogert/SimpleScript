@@ -5,6 +5,7 @@ class ContentWindow : public Window
 {
 public:
 	void Start() override;
+	void Specs() override;
 	void OnGUI() override;
 
 private:
