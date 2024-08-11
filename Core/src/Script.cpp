@@ -225,6 +225,9 @@ void Script::Export()
 				p.AppendRun("");
 				p.SetFont("CourierPrime");
 				p.SetFontSize(12.);
+				p.SetBeforeSpacing(0);
+				p.SetAfterSpacing(0);
+				p.SetLineSpacingLines(1.);
 				
 				p = doc.AppendParagraph();
 
@@ -235,6 +238,9 @@ void Script::Export()
 
 				p.SetFont("CourierPrime");
 				p.SetFontSize(12.);
+				p.SetBeforeSpacing(0);
+				p.SetAfterSpacing(0);
+				p.SetLineSpacingLines(1.);
 				p = doc.AppendParagraph();
 			}
 
@@ -245,6 +251,9 @@ void Script::Export()
 				p.AppendRun(")");
 				p.SetFont("CourierPrime");
 				p.SetFontSize(12.);
+				p.SetBeforeSpacing(0);
+				p.SetAfterSpacing(0);
+				p.SetLineSpacingLines(1.);
 			}
 			else // Dialogue
 			{
@@ -254,6 +263,9 @@ void Script::Export()
 					p.AppendRun("\t\t\t" + line);
 					p.SetFont("CourierPrime");
 					p.SetFontSize(12.);
+					p.SetBeforeSpacing(0);
+					p.SetAfterSpacing(0);
+					p.SetLineSpacingLines(1.);
 					if (line != formatted.back())
 						p = doc.AppendParagraph();
 				}
@@ -270,6 +282,9 @@ void Script::Export()
 		p.AppendRun("");
 		p.SetFont("CourierPrime");
 		p.SetFontSize(12.);
+		p.SetBeforeSpacing(0);
+		p.SetAfterSpacing(0);
+		p.SetLineSpacingLines(1.);
 
 		p = doc.AppendParagraph();
 
@@ -278,6 +293,9 @@ void Script::Export()
 			p.AppendRun(Utility::SlugFormat(slugCount++, block.content));
 			p.SetFont("CourierPrime");
 			p.SetFontSize(12.);
+			p.SetBeforeSpacing(0);
+			p.SetAfterSpacing(0);
+			p.SetLineSpacingLines(1.);
 			p.SetFontStyle(docx::Run::Bold);
 			continue;
 		}
@@ -289,6 +307,9 @@ void Script::Export()
 			p.AppendRun("\t" + line);
 			p.SetFont("CourierPrime");
 			p.SetFontSize(12.);
+			p.SetBeforeSpacing(0);
+			p.SetAfterSpacing(0);
+			p.SetLineSpacingLines(1.);
 			if (line != formatted.back())
 				p = doc.AppendParagraph();
 		}
