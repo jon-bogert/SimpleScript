@@ -101,6 +101,18 @@ void Application::OnGUI()
 			{
 				script.Export();
 			}
+			ImGui::Separator();
+			if (script.GetFilePath().empty())
+			{
+				ImGui::TextDisabled("Open Project Folder");
+			}
+			else
+			{
+				if (ImGui::MenuItem("Open Project Folder##File"))
+				{
+					ShellExecuteW(NULL, L"open", (L"\"" + script.GetFilePath() + L"\"").c_str(), NULL, NULL, SW_SHOWNORMAL);
+				}
+			}
 			ImGui::EndMenu();
 		}
 		//if (ImGui::BeginMenu("Edit##MM"))

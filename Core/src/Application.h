@@ -18,7 +18,7 @@
 #define VERSION_MINOR 2
 #endif
 #ifndef VERSION_PATCH
-#define VERSION_PATCH 2
+#define VERSION_PATCH 3
 #endif
 
 enum class UIStyle { Dark, Light, Custom};

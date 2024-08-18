@@ -30,6 +30,7 @@ public:
 	void SetName(const std::string& name ) { m_name = name; }
 
 	void OpenDialogue();
+	std::wstring GetFilePath() const { return m_filepath; }
 
 private:
 	std::wstring SaveDialogue();
