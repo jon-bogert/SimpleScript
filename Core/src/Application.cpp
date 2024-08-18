@@ -18,7 +18,7 @@ void Application::Start()
 	toolbarWindow = WindowManager::NewWindow<ToolbarWindow>();
 
 #ifdef _DEBUG
-	script.Load("example.yaml");
+	script.Load("example");
 #endif //_DEBUG
 }
 
