@@ -33,6 +33,7 @@ public:
 
 private:
 	std::wstring SaveDialogue();
+	void MoveToBackup();
 
 	std::vector<TextBlock> m_blocks;
 	std::string m_name = "Untitled";

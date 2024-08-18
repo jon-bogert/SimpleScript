@@ -390,6 +390,8 @@ void Script::Save(bool doForceDialogue)
 		}
 	}
 
+	MoveToBackup();
+
 	std::ofstream file;
 	file.open(m_filepath + L"\\_project.yaml");
 
@@ -540,4 +542,54 @@ std::wstring Script::SaveDialogue()
 		Application::Get().lastSave = path;
 	}
 	return path;
+}
+
+void Script::MoveToBackup()
+{
+	std::vector<std::filesystem::path> files;
+
+	if (std::filesystem::exists(m_filepath + L"\\_project.yaml"))
+		files.push_back(m_filepath + L"\\_project.yaml");
+
+	for (const std::filesystem::directory_entry& filename : std::filesystem::directory_iterator(m_filepath))
+	{
+		try
+		{
+			if (!filename.path().has_extension()
+				|| (filename.path().extension() != L".yaml"
+					&& filename.path().extension() != L".YAML"))
+			{
+				continue;
+			}
+
+			std::string checkFront = filename.path().filename().u8string().substr(0, 4);
+			if (checkFront[3] != '_'
+				|| checkFront[0] < '0' || checkFront[0] > '9'
+				|| checkFront[1] < '0' || checkFront[1] > '9'
+				|| checkFront[2] < '0' || checkFront[2] > '9')
+			{
+				continue;
+			}
+		}
+		catch (std::exception)
+		{
+			continue;
+		}
+		files.push_back(filename);
+	}
+
+	if (files.empty())
+		return;
+
+	std::filesystem::path backupPath = m_filepath + L"\\.backup";
+	if (std::filesystem::exists(backupPath))
+		std::filesystem::remove_all(backupPath);
+
+	std::filesystem::create_directories(backupPath);
+
+	for (const std::filesystem::path& file : files)
+	{
+		std::filesystem::copy_file(file, backupPath / file.filename());
+		std::filesystem::remove(file);
+	}
 }

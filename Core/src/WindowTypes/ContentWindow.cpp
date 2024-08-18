@@ -36,7 +36,7 @@ void ContentWindow::OnGUI()
 	}
 
 	bool isHeaderOpen = false;
-	uint32_t slugCount = 0;
+	uint32_t slugCount = 1;
 	std::string lastCharacter = "";
 	bool wasLastDialogue = false; // or parethetical
 
