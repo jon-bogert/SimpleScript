@@ -336,6 +336,9 @@ void Script::Save(bool doForceDialogue)
 		}
 	}
 
+	std::ofstream file;
+	file.open(m_filepath + L"\\_project.yaml");
+
 	YAML::Node root;
 	root["name"] = m_name;
 	CharacterManifest& manifest = CharacterManifest::Get();
@@ -353,13 +356,35 @@ void Script::Save(bool doForceDialogue)
 		root["characters"].push_back(charEntry);
 	}
 
+	file << root;
+	file.close();
+
+	if (m_blocks.empty())
+	{
+		app.isSaved = true;
+		return;
+	}
+
+	root = YAML::Node();
+	std::string filename{};
+
+	size_t blockCount = 0;
 	for (const TextBlock& block : m_blocks)
 	{
+
 		YAML::Node blockEntry;
 		switch (block.type)
 		{
 		case TextBlock::Slug:
 			blockEntry["type"] = "Slug";
+			if (!filename.empty()) // Save if not first
+			{
+				file.open(std::filesystem::path(m_filepath) / (filename + ".yaml"));
+				file << root;
+				file.close();
+				root = YAML::Node(); // Clear;
+			}
+			filename = Utility::SlugFileFormat(blockCount++, block.content);
 			break;
 		case TextBlock::Action:
 			blockEntry["type"] = "Action";
@@ -382,14 +407,9 @@ void Script::Save(bool doForceDialogue)
 		root["contents"].push_back(blockEntry);
 	}
 
-	std::filesystem::path path = m_filepath;
-
-	if (!std::filesystem::exists(path.parent_path()))
-		std::filesystem::create_directories(path.parent_path());
-
-	std::ofstream file(m_filepath);
-
+	file.open(std::filesystem::path(m_filepath) / (filename + ".yaml"));
 	file << root;
+	file.close();
 
 	app.isSaved = true;
 }
@@ -420,12 +440,11 @@ void Script::OpenDialogue()
 std::wstring Script::SaveDialogue()
 {
 	xe::FileBrowser browser;
-	browser.PushFileType(L"*.yaml", L"YAML File");
 	browser.SetStartPath(Application::Get().lastSave);
-	std::filesystem::path path = browser.SaveFile();
+	std::filesystem::path path = browser.LoadFolder();
 	if (!path.empty())
 	{
-		Application::Get().lastSave = std::filesystem::path(path).parent_path();
+		Application::Get().lastSave = path;
 	}
 	return path;
 }

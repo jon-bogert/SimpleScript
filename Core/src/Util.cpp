@@ -130,4 +130,38 @@ namespace Utility
 		}
 		return color;
 	}
+	std::string SlugFileFormat(size_t index, const std::string& content)
+	{
+		std::string result = content;
+		bool lastWhitespace = false;
+		for (auto iter = result.begin(); iter != result.end();)
+		{
+			if (*iter < 'A' || *iter > 'Z')
+			{
+				if (lastWhitespace)
+				{
+					iter = result.erase(iter);
+					continue;
+				}
+
+				*iter = '_';
+
+				lastWhitespace = true;
+				++iter;
+				continue;
+			}
+			lastWhitespace = false;
+			++iter;
+		}
+
+		std::string numFormat{};
+		if (index < 100)
+			numFormat += '0';
+		if (index < 10)
+			numFormat += '0';
+
+		numFormat += std::to_string(index) + "_";
+
+		return numFormat + result;
+	}
 }
