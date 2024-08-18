@@ -12,6 +12,8 @@
 #include <filesystem>
 #include <fstream>
 
+#define SAVE_VERSION 1
+
 void Script::AddBlock(TextBlock::Type type, size_t index)
 {
 	if (index == SIZE_MAX || index >= m_blocks.size() - 1)
@@ -59,12 +61,6 @@ bool Script::MoveDown(size_t index)
 
 void Script::Load(const std::filesystem::path path)
 {
-	if (!std::filesystem::exists(path))
-	{
-		LOG("Scene could not find file: %s", path.c_str());
-		return;
-	}
-
 	Application& app = Application::Get();
 	auto found = std::find(app.recentFiles.begin(), app.recentFiles.end(), path);
 	if (found != app.recentFiles.end())
@@ -86,7 +82,10 @@ void Script::Load(const std::filesystem::path path)
 	CharacterManifest& characters = CharacterManifest::Get();
 	m_filepath = path;
 
-	YAML::Node root = YAML::LoadFile(path.u8string());
+	std::ifstream file;
+	file.open(path / L"_project.yaml");
+	YAML::Node root = YAML::Load(file);
+	file.close();
 
 	if (root["name"].IsDefined())
 	{
@@ -95,7 +94,6 @@ void Script::Load(const std::filesystem::path path)
 
 	if (root["characters"].IsDefined())
 	{
-
 		for (const YAML::Node charEntry : root["characters"])
 		{
 			if (!charEntry["name"].IsDefined())
@@ -126,67 +124,102 @@ void Script::Load(const std::filesystem::path path)
 		}
 	}
 
-	if (!root["contents"].IsDefined())
-		return;
-
-	for (const YAML::Node& blockEntry : root["contents"])
+	std::vector<std::filesystem::path> files;
+	for (const std::filesystem::directory_entry& filename : std::filesystem::directory_iterator(m_filepath))
 	{
-		//data for error messages
-		std::stringstream ss;
-		ss << blockEntry;
-
-		TextBlock block;
-		if (!blockEntry["type"].IsDefined())
+		try
 		{
-			LOG("On Parse, content node missing 'type' field: %s", ss.str().c_str());
-			continue;
-		}
-
-		std::string typeStr = blockEntry["type"].as<std::string>();
-		if (typeStr == "Slug")
-			block.type = TextBlock::Type::Slug;
-		else if (typeStr == "Action")
-			block.type = TextBlock::Type::Action;
-		else if (typeStr == "Parenthetical")
-			block.type = TextBlock::Type::Parenthetical;
-		else if (typeStr == "Dialogue")
-			block.type = TextBlock::Type::Dialogue;
-		else if (typeStr == "Note")
-			block.type = TextBlock::Type::Note;
-		else
-		{
-			LOG("On Parse, unknown block type: %s", typeStr.c_str());
-			continue;
-		}
-
-		CharacterManifest& characterManiftest = CharacterManifest::Get();
-
-		switch (block.type)
-		{
-		case TextBlock::Type::Parenthetical:
-		case TextBlock::Type::Dialogue:
-			if (!blockEntry["character"].IsDefined())
+			if (!filename.path().has_extension()
+				|| (filename.path().extension() != L".yaml"
+					&& filename.path().extension() != L".YAML"))
 			{
-				LOG("On Parse, content node missing 'character' field: %s", ss.str().c_str());
 				continue;
 			}
 
-			std::string character = blockEntry["character"].as<std::string>();
-			Utility::AllCaps(character);
-			if (!characterManiftest.contains(character))
+			std::string checkFront = filename.path().filename().u8string().substr(0, 4);
+			if (checkFront[3] != '_'
+				|| checkFront[0] < '0' || checkFront[0] > '9'
+				|| checkFront[1] < '0' || checkFront[1] > '9'
+				|| checkFront[2] < '0' || checkFront[2] > '9')
 			{
-				LOG("Warning: No Character found: %s", character.c_str());
+				continue;
 			}
-			block.character = character;
-			break;
 		}
-
-		if (blockEntry["text"].IsDefined())
+		catch (std::exception)
 		{
-			block.content = blockEntry["text"].as<std::string>();
+			continue;
 		}
-		
-		m_blocks.push_back(block);
+		files.push_back(filename);
+	}
+
+	for (const std::filesystem::path& slugFile : files)
+	{
+		file.open(slugFile);
+		root = YAML::Load(file);
+		file.close();
+
+		if (!root["contents"].IsDefined())
+			continue;
+
+		for (const YAML::Node& blockEntry : root["contents"])
+		{
+			//data for error messages
+			std::stringstream ss;
+			ss << blockEntry;
+
+			TextBlock block;
+			if (!blockEntry["type"].IsDefined())
+			{
+				LOG("On Parse, content node missing 'type' field: %s", ss.str().c_str());
+				continue;
+			}
+
+			std::string typeStr = blockEntry["type"].as<std::string>();
+			if (typeStr == "Slug")
+				block.type = TextBlock::Type::Slug;
+			else if (typeStr == "Action")
+				block.type = TextBlock::Type::Action;
+			else if (typeStr == "Parenthetical")
+				block.type = TextBlock::Type::Parenthetical;
+			else if (typeStr == "Dialogue")
+				block.type = TextBlock::Type::Dialogue;
+			else if (typeStr == "Note")
+				block.type = TextBlock::Type::Note;
+			else
+			{
+				LOG("On Parse, unknown block type: %s", typeStr.c_str());
+				continue;
+			}
+
+			CharacterManifest& characterManiftest = CharacterManifest::Get();
+
+			switch (block.type)
+			{
+			case TextBlock::Type::Parenthetical:
+			case TextBlock::Type::Dialogue:
+				if (!blockEntry["character"].IsDefined())
+				{
+					LOG("On Parse, content node missing 'character' field: %s", ss.str().c_str());
+					continue;
+				}
+
+				std::string character = blockEntry["character"].as<std::string>();
+				Utility::AllCaps(character);
+				if (!characterManiftest.contains(character))
+				{
+					LOG("Warning: No Character found: %s", character.c_str());
+				}
+				block.character = character;
+				break;
+			}
+
+			if (blockEntry["text"].IsDefined())
+			{
+				block.content = blockEntry["text"].as<std::string>();
+			}
+
+			m_blocks.push_back(block);
+		}
 	}
 }
 
@@ -357,7 +390,11 @@ void Script::Save(bool doForceDialogue)
 		}
 	}
 
+	std::ofstream file;
+	file.open(m_filepath + L"\\_project.yaml");
+
 	YAML::Node root;
+	root["version"] = SAVE_VERSION;
 	root["name"] = m_name;
 	CharacterManifest& manifest = CharacterManifest::Get();
 	for (size_t i = 0; i < manifest.size(); ++i)
@@ -374,13 +411,35 @@ void Script::Save(bool doForceDialogue)
 		root["characters"].push_back(charEntry);
 	}
 
+	file << root;
+	file.close();
+
+	if (m_blocks.empty())
+	{
+		app.isSaved = true;
+		return;
+	}
+
+	root = YAML::Node();
+	std::string filename{};
+
+	size_t blockCount = 0;
 	for (const TextBlock& block : m_blocks)
 	{
+
 		YAML::Node blockEntry;
 		switch (block.type)
 		{
 		case TextBlock::Slug:
 			blockEntry["type"] = "Slug";
+			if (!filename.empty()) // Save if not first
+			{
+				file.open(std::filesystem::path(m_filepath) / (filename + ".yaml"));
+				file << root;
+				file.close();
+				root = YAML::Node(); // Clear;
+			}
+			filename = Utility::SlugFileFormat(blockCount++, block.content);
 			break;
 		case TextBlock::Action:
 			blockEntry["type"] = "Action";
@@ -403,14 +462,9 @@ void Script::Save(bool doForceDialogue)
 		root["contents"].push_back(blockEntry);
 	}
 
-	std::filesystem::path path = m_filepath;
-
-	if (!std::filesystem::exists(path.parent_path()))
-		std::filesystem::create_directories(path.parent_path());
-
-	std::ofstream file(m_filepath);
-
+	file.open(std::filesystem::path(m_filepath) / (filename + ".yaml"));
 	file << root;
+	file.close();
 
 	app.isSaved = true;
 }
@@ -428,25 +482,62 @@ void Script::New()
 void Script::OpenDialogue()
 {
 	xe::FileBrowser browser;
-	browser.PushFileType(L"*.yaml", L"YAML File");
 	browser.SetStartPath(Application::Get().lastOpen);
-	std::wstring path = browser.GetFile();
+	std::wstring path = browser.LoadFolder();
 	if (path.empty())
 		return;
 
-	Application::Get().lastOpen = std::filesystem::path(path).parent_path();
-	Load(path);
+	if (!std::filesystem::exists(std::filesystem::path(path) / L"_project.yaml"))
+	{
+		MessageBox(NULL, L"Invalid project folder. Folder does not contain \"_project.yaml\".", L"Open Error", MB_ICONERROR | MB_OK );
+		return;
+	}
+	int version = 0;
+	try
+	{
+		std::ifstream file(std::filesystem::path(path) / L"_project.yaml");
+		version = YAML::Load(file)["version"].as<int>();
+	}
+	catch (std::exception)
+	{
+		MessageBox(NULL, L"Invalid project. \"_project.yaml\" does not contain version number.", L"Open Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	if (version <= 0)
+	{
+		MessageBox(NULL, L"Project version number invalid.", L"Open Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	if (version > SAVE_VERSION)
+	{
+		MessageBox(NULL, L"Project was created with a newer version of SimpleScript and cannot be opened.", L"Open Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	Application::Get().lastOpen = path;
+
+	// IMPLEMENT COMPATIBILITY WITH OLDER SAVE VERSIONS HERE
+	switch (version)
+	{
+	case SAVE_VERSION:
+		Load(path);
+		break;
+	default:
+		MessageBox(NULL, L"Unimplemented save version.", L"Open Error", MB_ICONERROR | MB_OK);
+		break;
+	}
 }
 
 std::wstring Script::SaveDialogue()
 {
 	xe::FileBrowser browser;
-	browser.PushFileType(L"*.yaml", L"YAML File");
 	browser.SetStartPath(Application::Get().lastSave);
-	std::filesystem::path path = browser.SaveFile();
+	std::filesystem::path path = browser.LoadFolder();
 	if (!path.empty())
 	{
-		Application::Get().lastSave = std::filesystem::path(path).parent_path();
+		Application::Get().lastSave = path;
 	}
 	return path;
 }

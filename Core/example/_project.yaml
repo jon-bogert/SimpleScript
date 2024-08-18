@@ -1,0 +1,33 @@
+version: 1
+name: Star Wars Excerpt
+characters:
+  - name: LUKE
+    color:
+      - 106
+      - 255
+      - 160
+    notes: Farmer boy from Tatooine.
+  - name: THREEPIO
+    color:
+      - 255
+      - 226
+      - 67
+    notes: Protocol droid of the Rebel Alliance
+  - name: ARTOO
+    color:
+      - 53
+      - 197
+      - 251
+    notes: Astromech droid of the Rebel Alliance
+  - name: OWEN
+    color:
+      - 145
+      - 101
+      - 33
+    notes: Luke's Uncle
+  - name: BERU
+    color:
+      - 122
+      - 228
+      - 223
+    notes: Luke's Aunt

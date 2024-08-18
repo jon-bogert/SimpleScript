@@ -13,5 +13,7 @@ namespace Utility
 	std::string SlugFormat(const uint32_t number, const std::string& line);
 	xe::Color ClipColor(const xe::Color& color);
 	xe::Color RandomColor();
+
+	std::string SlugFileFormat(size_t index, const std::string& content);
 }
 
