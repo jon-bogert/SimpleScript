@@ -62,7 +62,14 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
     //ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, app.name, nullptr };
     ::RegisterClassExW(&wc);
-    HWND hwnd = ::CreateWindowW(wc.lpszClassName, app.name, WS_OVERLAPPEDWINDOW, app.windowPosX, app.windowPosY, app.windowWidth, app.windowHeight, nullptr, nullptr, wc.hInstance, nullptr);
+
+    // Adjust Window size/position for borders
+    RECT windowRect = { app.windowPosX, app.windowPosY, app.windowPosX + app.windowWidth , app.windowPosY + app.windowHeight };
+    AdjustWindowRectEx(&windowRect, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW);
+    uint32_t width  = windowRect.right - windowRect.left;
+    uint32_t height = windowRect.bottom - windowRect.top;
+
+    HWND hwnd = ::CreateWindowW(wc.lpszClassName, app.name, WS_OVERLAPPEDWINDOW, windowRect.left, windowRect.top, width, height, nullptr, nullptr, wc.hInstance, nullptr);
 
     // Initialize Direct3D
     if (!CreateDeviceD3D(hwnd))
