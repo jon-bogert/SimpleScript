@@ -153,6 +153,8 @@ namespace Utility
 			lastWhitespace = false;
 			++iter;
 		}
+		if (result.back() == '_')
+			result.pop_back();
 
 		std::string numFormat{};
 		if (index < 100)

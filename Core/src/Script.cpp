@@ -12,6 +12,8 @@
 #include <filesystem>
 #include <fstream>
 
+#define SAVE_VERSION 1
+
 void Script::AddBlock(TextBlock::Type type, size_t index)
 {
 	if (index == SIZE_MAX || index >= m_blocks.size() - 1)
@@ -95,7 +97,6 @@ void Script::Load(const std::filesystem::path path)
 
 	if (root["characters"].IsDefined())
 	{
-
 		for (const YAML::Node charEntry : root["characters"])
 		{
 			if (!charEntry["name"].IsDefined())
@@ -340,6 +341,7 @@ void Script::Save(bool doForceDialogue)
 	file.open(m_filepath + L"\\_project.yaml");
 
 	YAML::Node root;
+	root["version"] = SAVE_VERSION;
 	root["name"] = m_name;
 	CharacterManifest& manifest = CharacterManifest::Get();
 	for (size_t i = 0; i < manifest.size(); ++i)
